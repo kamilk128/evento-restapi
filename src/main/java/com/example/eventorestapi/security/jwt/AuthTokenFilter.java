@@ -1,7 +1,7 @@
 package com.example.eventorestapi.security.jwt;
 
-import com.example.eventorestapi.service.UserDetailsImpl;
-import com.example.eventorestapi.service.UserDetailsServiceImpl;
+import com.example.eventorestapi.security.service.UserDetailsImpl;
+import com.example.eventorestapi.security.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

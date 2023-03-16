@@ -1,4 +1,4 @@
-package com.example.eventorestapi.service;
+package com.example.eventorestapi.security.service;
 
 import com.example.eventorestapi.models.MyUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;

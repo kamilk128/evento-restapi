@@ -50,6 +50,7 @@ public class SecurityConfig {
         http.cors().and().csrf().disable();
         http.authorizeHttpRequests()
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/events/**").permitAll()
                 .anyRequest().authenticated();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

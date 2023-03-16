@@ -1,6 +1,6 @@
 package com.example.eventorestapi.security.jwt;
 
-import com.example.eventorestapi.service.UserDetailsImpl;
+import com.example.eventorestapi.security.service.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

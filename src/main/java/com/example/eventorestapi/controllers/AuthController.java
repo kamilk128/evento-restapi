@@ -5,7 +5,7 @@ import com.example.eventorestapi.payload.request.RegisterRequest;
 import com.example.eventorestapi.payload.response.MessageResponse;
 import com.example.eventorestapi.payload.response.UserInfoResponse;
 import com.example.eventorestapi.security.jwt.JwtUtils;
-import com.example.eventorestapi.service.UserDetailsImpl;
+import com.example.eventorestapi.security.service.UserDetailsImpl;
 import com.example.eventorestapi.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

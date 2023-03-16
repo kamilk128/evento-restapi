@@ -1,7 +1,8 @@
-package com.example.eventorestapi.service;
+package com.example.eventorestapi.security.service;
 
 import com.example.eventorestapi.models.MyUser;
 import com.example.eventorestapi.repository.UserRepository;
+import com.example.eventorestapi.security.service.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
