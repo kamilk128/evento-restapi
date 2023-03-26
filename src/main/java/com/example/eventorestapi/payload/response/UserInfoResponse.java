@@ -1,20 +1,26 @@
 package com.example.eventorestapi.payload.response;
 
-import java.util.List;
+import com.example.eventorestapi.models.MyUser;
+import com.example.eventorestapi.security.service.UserDetailsImpl;
 
 public class UserInfoResponse {
     private Long id;
-    private String nick;
+    private String username;
     private String email;
-    private int age;
-    private List<String> roles;
+    private Long dateOfBirth;
 
-    public UserInfoResponse(Long id, String email, String nick, int age, List<String> roles) {
-        this.id = id;
-        this.nick = nick;
-        this.email = email;
-        this.age = age;
-        this.roles = roles;
+    public UserInfoResponse(MyUser user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.dateOfBirth = user.getDateOfBirth().getTime();
+    }
+
+    public UserInfoResponse(UserDetailsImpl userDetails) {
+        this.id = userDetails.getId();
+        this.username = userDetails.getUsername();
+        this.email = userDetails.getNick();
+        this.dateOfBirth = userDetails.getDateOfBirth().getTime();
     }
 
     public Long getId() {
@@ -33,22 +39,19 @@ public class UserInfoResponse {
         this.email = email;
     }
 
-    public String getNick() {
-        return nick;
+    public String getUsername() {
+        return username;
     }
 
-    public void setNick(String nick) {
-        this.nick = nick;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public int getAge() {
-        return age;
-    }
-    public void setId(int age) {
-        this.age = age;
+    public Long getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public void setDateOfBirth(Long dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }

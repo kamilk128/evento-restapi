@@ -1,48 +1,41 @@
-package com.example.eventorestapi.models;
+package com.example.eventorestapi.payload.request;
 
-import jakarta.persistence.*;
+import com.example.eventorestapi.models.Event;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
 
-@Entity
-@Table(name = "events")
-public class Event {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(nullable = false)
+public class CreateEventRequest {
+    @NotBlank(message = "name is required.")
     private String name;
-
-    @Column(nullable = false)
-    private String author;
-
-    @Column(nullable = false)
+    @NotBlank(message = "category is required.")
     private String category;
-
-    @Column(nullable = false)
+    @NotBlank(message = "imageURL is required.")
     private String imageURL;
-
-    @Column(nullable = false)
-    private Date startDate;
-
-    @Column(nullable = false)
-    private Date endDate;
-
+    @NotNull(message = "startDate is required.")
+    private Long startDate;
+    @NotNull(message = "endDate is required.")
+    private Long endDate;
+    @NotNull(message = "marker is required.")
     private double[] marker;
-    private Long participantsNumber;
+    @NotNull(message = "maxParticipantsNumber is required.")
     private Long maxParticipantsNumber;
-
-    @Column(nullable = false)
+    @NotBlank(message = "description is required.")
     private String description;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Event toEvent(){
+        Event event = new Event();
+        event.setName(name);
+        event.setCategory(category);
+        event.setImageURL(imageURL);
+        event.setStartDate(new Date(startDate));
+        event.setEndDate(new Date(endDate));
+        event.setMarker(marker);
+        event.setMaxParticipantsNumber(maxParticipantsNumber);
+        event.setDescription(description);
+        return event;
     }
 
     public String getName() {
@@ -51,14 +44,6 @@ public class Event {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
     }
 
     public String getCategory() {
@@ -77,19 +62,19 @@ public class Event {
         this.imageURL = imageURL;
     }
 
-    public Date getStartDate() {
+    public Long getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Long startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public Long getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Long endDate) {
         this.endDate = endDate;
     }
 
@@ -99,14 +84,6 @@ public class Event {
 
     public void setMarker(double[] marker) {
         this.marker = marker;
-    }
-
-    public Long getParticipantsNumber() {
-        return participantsNumber;
-    }
-
-    public void setParticipantsNumber(Long participantsNumber) {
-        this.participantsNumber = participantsNumber;
     }
 
     public Long getMaxParticipantsNumber() {

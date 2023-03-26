@@ -2,6 +2,8 @@ package com.example.eventorestapi.models;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "users")
 public class MyUser {
@@ -9,26 +11,26 @@ public class MyUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable = false, unique = true)
-    private String nick;
+    private String username;
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
     private String password;
 
-    private int age;
+    private Date dateOfBirth;
 
-    public MyUser(String email, String nick, String password, int age) {
+    public MyUser(String email, String username, String password, Date dateOfBirth) {
         this.email = email;
-        this.nick = nick;
+        this.username = username;
         this.password = password;
-        this.age = age;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public MyUser() {
         this.email = "";
-        this.nick = "";
+        this.username = "";
         this.password = "";
-        this.age = 0;
+        this.dateOfBirth = new Date(0);
     }
 
     public void setPassword(String hashedPassword) {
@@ -39,12 +41,12 @@ public class MyUser {
         this.email = email;
     }
 
-    public void setNick(String nick) {
-        this.nick = nick;
+    public void setUsername(String nick) {
+        this.username = nick;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getPassword() {
@@ -55,15 +57,15 @@ public class MyUser {
         return email;
     }
 
-    public String getNick() {
-        return nick;
+    public String getUsername() {
+        return username;
     }
 
     public Long getId() {
         return id;
     }
 
-    public int getAge() {
-        return age;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 }

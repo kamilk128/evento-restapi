@@ -16,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -38,11 +39,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> exception(Exception ex) {
-
         Map<String, String> body = new HashMap<>();
         body.put("error", ex.getMessage());
         body.put("details", ex.toString());
-
         return new ResponseEntity<>(body, new HttpHeaders(), INTERNAL_SERVER_ERROR);
     }
 }

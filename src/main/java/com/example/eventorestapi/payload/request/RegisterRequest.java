@@ -2,22 +2,26 @@ package com.example.eventorestapi.payload.request;
 
 import com.example.eventorestapi.models.MyUser;
 import jakarta.validation.constraints.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 public class RegisterRequest {
-    @NotBlank(message = "username is required.")
+    @NotBlank(message = "email is required.")
     @Size(max = 50)
     @Email
     private String email;
 
-    @NotBlank(message = "nick is required.")
+    @NotBlank(message = "username is required.")
     @Size(min = 3, max = 20)
-    private String nick;
+    private String username;
 
     @NotBlank(message = "password is required.")
     @Size(min = 6, max = 40)
     private String password;
 
-    private int age;
+    @NotNull(message = "dateOfBirth is required.")
+    private Long dateOfBirth;
 
     public String getEmail() {
         return email;
@@ -27,12 +31,12 @@ public class RegisterRequest {
         this.email = email;
     }
 
-    public String getNick() {
-        return nick;
+    public String getUsername() {
+        return username;
     }
 
-    public void setNick(String nick) {
-        this.nick = nick;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -43,15 +47,15 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    public int getAge() {
-        return age;
+    public Long getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setDateOfBirth(Long dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public MyUser toUser() {
-        return new MyUser(email, nick, password, age);
+        return new MyUser(email, username, password, new Date(dateOfBirth));
     }
 }

@@ -1,48 +1,41 @@
-package com.example.eventorestapi.models;
+package com.example.eventorestapi.payload.response;
 
-import jakarta.persistence.*;
+import com.example.eventorestapi.models.Event;
 
-import java.util.Date;
+public class EventInfoResponse {
 
-@Entity
-@Table(name = "events")
-public class Event {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(nullable = false)
+    Long eventId;
     private String name;
-
-    @Column(nullable = false)
     private String author;
-
-    @Column(nullable = false)
     private String category;
-
-    @Column(nullable = false)
     private String imageURL;
-
-    @Column(nullable = false)
-    private Date startDate;
-
-    @Column(nullable = false)
-    private Date endDate;
-
+    private Long startDate;
+    private Long endDate;
     private double[] marker;
+
     private Long participantsNumber;
     private Long maxParticipantsNumber;
-
-    @Column(nullable = false)
     private String description;
-
-    public Long getId() {
-        return id;
+    public EventInfoResponse(Event event) {
+        this.eventId = event.getId();
+        this.name = event.getName();
+        this.author = event.getAuthor();
+        this.category = event.getCategory();
+        this.imageURL = event.getImageURL();
+        this.startDate = event.getStartDate().getTime();
+        this.endDate = event.getEndDate().getTime();
+        this.marker = event.getMarker();
+        this.participantsNumber = event.getParticipantsNumber();
+        this.maxParticipantsNumber = event.getMaxParticipantsNumber();
+        this.description = event.getDescription();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 
     public String getName() {
@@ -77,19 +70,19 @@ public class Event {
         this.imageURL = imageURL;
     }
 
-    public Date getStartDate() {
+    public Long getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Long startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public Long getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Long endDate) {
         this.endDate = endDate;
     }
 

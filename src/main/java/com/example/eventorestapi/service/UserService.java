@@ -22,10 +22,10 @@ public class UserService {
     public void registerUser(MyUser myUser) throws UserAlreadyExistsException {
 
         if (userRepository.existsByEmail(myUser.getEmail())) {
-            throw new UserAlreadyExistsException("Username already taken");
-        }
-        if (userRepository.existsByNick(myUser.getNick())) {
             throw new UserAlreadyExistsException("Email already taken");
+        }
+        if (userRepository.existsByUsername(myUser.getUsername())) {
+            throw new UserAlreadyExistsException("Username already taken");
         }
         myUser.setPassword(bCryptPasswordEncoder.encode(myUser.getPassword()));
 
@@ -33,9 +33,8 @@ public class UserService {
     }
 
 
-    public UserInfoResponse getUserInfo(String username){
-        MyUser dbUser = userRepository.findByEmail(username);
-        return new UserInfoResponse(dbUser.getId(), dbUser.getEmail(), dbUser.getNick(), dbUser.getAge(), Collections.emptyList());
+    public UserInfoResponse getUserInfo(String email){
+        return new UserInfoResponse(userRepository.findByEmail(email));
     }
 
     public void removeUserByEmail(String email) {

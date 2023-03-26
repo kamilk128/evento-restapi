@@ -9,10 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 public interface UserRepository extends JpaRepository<MyUser, Long> {
     MyUser findByEmail(String email);
 
+    MyUser findByUsername(String username);
+
     @Transactional
     void deleteByEmail(String email);
 
-    boolean existsByNick(String nick);
+    boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
 }

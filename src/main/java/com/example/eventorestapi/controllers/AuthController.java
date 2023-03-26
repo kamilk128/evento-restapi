@@ -1,8 +1,8 @@
 package com.example.eventorestapi.controllers;
 
+import com.example.eventorestapi.models.MyUser;
 import com.example.eventorestapi.payload.request.LoginRequest;
 import com.example.eventorestapi.payload.request.RegisterRequest;
-import com.example.eventorestapi.payload.response.MessageResponse;
 import com.example.eventorestapi.payload.response.UserInfoResponse;
 import com.example.eventorestapi.security.jwt.JwtUtils;
 import com.example.eventorestapi.security.service.UserDetailsImpl;
@@ -53,24 +53,14 @@ public class AuthController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new UserInfoResponse(userDetails.getId(),
-                        userDetails.getUsername(),
-                        userDetails.getEmail(),
-                        userDetails.getAge(),
-                        roles));
+                .body(new UserInfoResponse(userDetails));
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        userService.registerUser(registerRequest.toUser());
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @PostMapping("/signout")
-    public ResponseEntity<?> logoutUser() {
-        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(new MessageResponse("You've been signed out!"));
+        MyUser user = registerRequest.toUser();
+        userService.registerUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new UserInfoResponse(user));
     }
 }
 

@@ -5,34 +5,31 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    private String username;
+    private String username; //email in authorization
 
-    private String email;
+    private String nick; //username
 
-    private int age;
+    private Date dateOfBirth;
 
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String email, String password, int age,
+    public UserDetailsImpl(Long id, String username, String nick, String password, Date dateOfBirth,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
-        this.email = email;
+        this.nick = nick;
         this.password = password;
-        this.age = age;
+        this.dateOfBirth = dateOfBirth;
         this.authorities = authorities;
     }
 
@@ -41,9 +38,9 @@ public class UserDetailsImpl implements UserDetails {
         return new UserDetailsImpl(
                 user.getId(),
                 user.getEmail(),
-                user.getNick(),
+                user.getUsername(),
                 user.getPassword(),
-                user.getAge(),
+                user.getDateOfBirth(),
                 authorities);
     }
 
@@ -56,12 +53,12 @@ public class UserDetailsImpl implements UserDetails {
         return id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getNick() {
+        return nick;
     }
 
-    public int getAge() {
-        return age;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 
     @Override
