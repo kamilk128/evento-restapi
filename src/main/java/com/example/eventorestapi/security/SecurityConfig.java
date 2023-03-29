@@ -48,10 +48,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain registerSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable();
+        http.csrf().disable();
         http.authorizeHttpRequests()
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/events/").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/events").permitAll()
                 .anyRequest().authenticated();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

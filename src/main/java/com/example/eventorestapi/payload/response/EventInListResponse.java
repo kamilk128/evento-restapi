@@ -12,7 +12,7 @@ public class EventInListResponse {
     public EventInListResponse(Event event) {
         this.eventId = event.getId();
         this.name = event.getName();
-        this.author = event.getAuthor();
+        this.author = event.getAuthor().getUsername();
         this.imageURL = event.getImageURL();
         this.participantsNumber = event.getParticipantsNumber();
     }

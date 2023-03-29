@@ -12,14 +12,13 @@ public class EventInfoResponse {
     private Long startDate;
     private Long endDate;
     private double[] marker;
-
     private Long participantsNumber;
     private Long maxParticipantsNumber;
     private String description;
     public EventInfoResponse(Event event) {
         this.eventId = event.getId();
         this.name = event.getName();
-        this.author = event.getAuthor();
+        this.author = event.getAuthor().getUsername();
         this.category = event.getCategory();
         this.imageURL = event.getImageURL();
         this.startDate = event.getStartDate().getTime();

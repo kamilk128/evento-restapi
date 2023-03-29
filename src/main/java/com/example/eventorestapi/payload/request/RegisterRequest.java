@@ -2,7 +2,6 @@ package com.example.eventorestapi.payload.request;
 
 import com.example.eventorestapi.models.MyUser;
 import jakarta.validation.constraints.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 

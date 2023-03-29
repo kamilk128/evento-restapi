@@ -15,8 +15,8 @@ public class Event {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String author;
+    @ManyToOne
+    private MyUser author;
 
     @Column(nullable = false)
     private String category;
@@ -53,11 +53,11 @@ public class Event {
         this.name = name;
     }
 
-    public String getAuthor() {
+    public MyUser getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(MyUser author) {
         this.author = author;
     }
 

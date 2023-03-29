@@ -46,7 +46,7 @@ public class EventService {
     public void deleteEvent(String user, Long id) {
         Optional<Event> event = eventRepository.findById(id);
         if (event.isPresent()) {
-            if (Objects.equals(event.get().getAuthor(), user)){
+            if (Objects.equals(event.get().getAuthor().getUsername(), user)){
                 eventRepository.deleteById(id);
             }else {
                 throw new UnauthorizedException("You don't have permission to modify this content");
@@ -60,7 +60,7 @@ public class EventService {
         Optional<Event> eventOpt = eventRepository.findById(modifyEventRequest.getEventId());
         if (eventOpt.isPresent()) {
             Event event = eventOpt.get();
-            if (Objects.equals(event.getAuthor(), user)){
+            if (Objects.equals(event.getAuthor().getUsername(), user)){
                 modifyEventRequest.modifyEvent(event);
                 eventRepository.save(event);
             }else {

@@ -1,6 +1,5 @@
 package com.example.eventorestapi.payload.response;
 
-import com.example.eventorestapi.models.MyUser;
 import com.example.eventorestapi.security.service.UserDetailsImpl;
 
 public class UserInfoResponse {
@@ -8,19 +7,14 @@ public class UserInfoResponse {
     private String username;
     private String email;
     private Long dateOfBirth;
+    private String token;
 
-    public UserInfoResponse(MyUser user) {
-        this.id = user.getId();
-        this.username = user.getUsername();
-        this.email = user.getEmail();
-        this.dateOfBirth = user.getDateOfBirth().getTime();
-    }
-
-    public UserInfoResponse(UserDetailsImpl userDetails) {
+    public UserInfoResponse(UserDetailsImpl userDetails, String token) {
         this.id = userDetails.getId();
-        this.username = userDetails.getUsername();
-        this.email = userDetails.getNick();
+        this.username = userDetails.getNick();
+        this.email = userDetails.getUsername();
         this.dateOfBirth = userDetails.getDateOfBirth().getTime();
+        this.token = token;
     }
 
     public Long getId() {
@@ -53,5 +47,13 @@ public class UserInfoResponse {
 
     public void setDateOfBirth(Long dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
