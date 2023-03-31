@@ -1,6 +1,10 @@
 package com.example.eventorestapi.payload.response;
 
 import com.example.eventorestapi.models.Event;
+import com.example.eventorestapi.models.MyUser;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventInfoResponse {
 
@@ -15,6 +19,8 @@ public class EventInfoResponse {
     private Long participantsNumber;
     private Long maxParticipantsNumber;
     private String description;
+    private List<String> participantsUsernames;
+
     public EventInfoResponse(Event event) {
         this.eventId = event.getId();
         this.name = event.getName();
@@ -27,6 +33,7 @@ public class EventInfoResponse {
         this.participantsNumber = event.getParticipantsNumber();
         this.maxParticipantsNumber = event.getMaxParticipantsNumber();
         this.description = event.getDescription();
+        this.participantsUsernames = event.getParticipants().stream().map(MyUser::getUsername).collect(Collectors.toList());
     }
 
     public Long getEventId() {
@@ -115,5 +122,13 @@ public class EventInfoResponse {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<String> getParticipantsUsernames() {
+        return participantsUsernames;
+    }
+
+    public void setParticipantsUsernames(List<String> participantsUsernames) {
+        this.participantsUsernames = participantsUsernames;
     }
 }

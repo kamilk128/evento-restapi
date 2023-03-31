@@ -3,6 +3,8 @@ package com.example.eventorestapi.models;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "events")
@@ -37,12 +39,11 @@ public class Event {
     @Column(nullable = false)
     private String description;
 
+    @ManyToMany(mappedBy = "events")
+    private Set<MyUser> participants = new HashSet<>();
+
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -123,5 +124,21 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<MyUser> getParticipants() {
+        return participants;
+    }
+
+    public void addParticipant(MyUser user) {
+        participants.add(user);
+        user.getEvents().add(this);
+        participantsNumber += 1;
+    }
+
+    public void deleteParticipant(MyUser user) {
+        participants.remove(user);
+        user.getEvents().remove(this);
+        participantsNumber -= 1;
     }
 }

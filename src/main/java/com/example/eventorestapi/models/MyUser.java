@@ -3,6 +3,8 @@ package com.example.eventorestapi.models;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -18,6 +20,14 @@ public class MyUser {
     private String password;
 
     private Date dateOfBirth;
+
+    @ManyToMany
+    @JoinTable(name = "user_event",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "event_id"}))
+    private Set<Event> events = new HashSet<>();
+
 
     public MyUser(String email, String username, String password, Date dateOfBirth) {
         this.email = email;
@@ -67,5 +77,13 @@ public class MyUser {
 
     public Date getDateOfBirth() {
         return dateOfBirth;
+    }
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
     }
 }
