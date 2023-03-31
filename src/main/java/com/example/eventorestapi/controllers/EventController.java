@@ -1,5 +1,6 @@
 package com.example.eventorestapi.controllers;
 
+import com.example.eventorestapi.exceptions.NotExistException;
 import com.example.eventorestapi.models.Event;
 import com.example.eventorestapi.models.MyUser;
 import com.example.eventorestapi.payload.request.CreateEventRequest;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin(origins = {"http://localhost:5173", "https://evento-krqply.netlify.app"})
 @RestController
@@ -36,18 +38,21 @@ public class EventController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getEvent(@PathVariable Long id) {
-        if (id == null){
+        if (id == null) {
             return ResponseEntity.badRequest().build();
-        }else {
+        } else {
             return ResponseEntity.ok(eventService.getEventById(id));
         }
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addEvent(Authentication authentication, @Valid @RequestBody CreateEventRequest createEventRequest){
+    public ResponseEntity<?> addEvent(Authentication authentication, @Valid @RequestBody CreateEventRequest createEventRequest) {
         Event event = createEventRequest.toEvent();
-        MyUser author = userService.getUserByEmail(authentication.getName());
-        event.setAuthor(author);
+        Optional<MyUser> author = userService.getUserByEmail(authentication.getName());
+        if (author.isEmpty()) {
+            throw new NotExistException("User", "email");
+        }
+        event.setAuthor(author.get());
         event.setParticipantsNumber(0L);
         Long id = eventService.createEvent(event);
         Map<String, String> body = new HashMap<>();
@@ -56,14 +61,14 @@ public class EventController {
     }
 
     @PutMapping("")
-    public ResponseEntity<?> modifyEvent(Authentication authentication, @Valid @RequestBody ModifyEventRequest modifyEventRequest){
+    public ResponseEntity<?> modifyEvent(Authentication authentication, @Valid @RequestBody ModifyEventRequest modifyEventRequest) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         eventService.modifyEvent(userDetails.getNick(), modifyEventRequest);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("")
-    public ResponseEntity<?> deleteEvent(Authentication authentication, @Valid @RequestBody EventIdRequest eventIdRequest){
+    public ResponseEntity<?> deleteEvent(Authentication authentication, @Valid @RequestBody EventIdRequest eventIdRequest) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         eventService.deleteEvent(userDetails.getNick(), eventIdRequest.getEventId());
         return ResponseEntity.ok().build();

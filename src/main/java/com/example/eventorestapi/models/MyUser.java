@@ -28,6 +28,16 @@ public class MyUser {
             uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "event_id"}))
     private Set<Event> events = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "friends",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "friend_id"}))
+    private Set<MyUser> friends = new HashSet<>();
+
+    @ManyToMany(mappedBy = "friends")
+    private Set<MyUser> friendOf = new HashSet<>();
+
 
     public MyUser(String email, String username, String password, Date dateOfBirth) {
         this.email = email;
@@ -47,7 +57,7 @@ public class MyUser {
         password = hashedPassword;
     }
 
-    public void setEmail(String Username) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -83,7 +93,29 @@ public class MyUser {
         return events;
     }
 
+    public Set<MyUser> getFriends() { return friends; }
+
+    public Set<MyUser> getFriendOf() { return friendOf; }
+
     public void setEvents(Set<Event> events) {
         this.events = events;
+    }
+
+    public void setFriends(Set<MyUser> friends) { this.friends = friends; }
+
+    public void setFriendOf(Set<MyUser> friendOf) { this.friendOf = friendOf; }
+
+    public void addFriend(MyUser friend) {
+        friends.add(friend);
+        friend.getFriendOf().add(this);
+    }
+
+    public void removeFriend(MyUser friend) {
+        friends.remove(friend);
+        friend.getFriendOf().remove(this);
+    }
+
+    public Boolean invitedFriend(MyUser friend) {
+        return friends.contains(friend);
     }
 }

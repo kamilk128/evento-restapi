@@ -27,7 +27,7 @@ public class EventService {
     public List<EventInListResponse> getEvents(int pageNumber, int pageSize, String sortBy, String filter) {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
-        if (sortBy != null){
+        if (sortBy != null) {
             Sort sort = Sort.by(sortBy).ascending();
             pageRequest = pageRequest.withSort(sort);
         }
@@ -36,13 +36,13 @@ public class EventService {
         if (filter != null) {
             EventSpecification spec = new EventSpecification("category", filter);
             eventPage = eventRepository.findAll(spec, pageRequest);
-        }else{
+        } else {
             eventPage = eventRepository.findAll(pageRequest);
         }
         List<Event> eventList = eventPage.getContent();
 
 
-        List<EventInListResponse> responseList = new ArrayList<EventInListResponse>();
+        List<EventInListResponse> responseList = new ArrayList<>();
         for (Event event: eventList) {
             responseList.add(new EventInListResponse(event));
         }
@@ -51,11 +51,10 @@ public class EventService {
 
     public EventInfoResponse getEventById(Long id) {
         Optional<Event> event = eventRepository.findById(id);
-        if (event.isPresent()) {
-            return new EventInfoResponse(event.get());
-        }else{
-            throw new NotExistException("Event with provided id does not exist");
+        if (event.isEmpty()) {
+            throw new NotExistException("Event", "id");
         }
+        return new EventInfoResponse(event.get());
     }
 
     public Long createEvent(Event event) {
@@ -65,29 +64,26 @@ public class EventService {
 
     public void deleteEvent(String user, Long id) {
         Optional<Event> event = eventRepository.findById(id);
-        if (event.isPresent()) {
-            if (Objects.equals(event.get().getAuthor().getUsername(), user)){
-                eventRepository.deleteById(id);
-            }else {
-                throw new UnauthorizedException("You don't have permission to modify this content");
-            }
-        }else{
-            throw new NotExistException("Event with provided id does not exist");
+        if (event.isEmpty()) {
+            throw new NotExistException("Event", "id");
+        }
+        if (Objects.equals(event.get().getAuthor().getUsername(), user)) {
+            eventRepository.deleteById(id);
+        } else {
+            throw new UnauthorizedException();
         }
     }
 
     public void modifyEvent(String user, ModifyEventRequest modifyEventRequest) {
-        Optional<Event> eventOpt = eventRepository.findById(modifyEventRequest.getEventId());
-        if (eventOpt.isPresent()) {
-            Event event = eventOpt.get();
-            if (Objects.equals(event.getAuthor().getUsername(), user)){
-                modifyEventRequest.modifyEvent(event);
-                eventRepository.save(event);
-            }else {
-                throw new UnauthorizedException("You don't have permission to modify this content");
-            }
-        }else{
-            throw new NotExistException("Event with provided id does not exist");
+        Optional<Event> event = eventRepository.findById(modifyEventRequest.getEventId());
+        if (event.isEmpty()) {
+            throw new NotExistException("Event", "id");
+        }
+        if (Objects.equals(event.get().getAuthor().getUsername(), user)) {
+            modifyEventRequest.modifyEvent(event.get());
+            eventRepository.save(event.get());
+        } else {
+            throw new UnauthorizedException();
         }
     }
 }

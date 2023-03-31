@@ -6,11 +6,7 @@ import com.example.eventorestapi.models.MyUser;
 import com.example.eventorestapi.payload.response.EventInListResponse;
 import com.example.eventorestapi.repository.EventRepository;
 import com.example.eventorestapi.repository.UserRepository;
-import com.example.eventorestapi.specifications.EventSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,45 +22,50 @@ public class UserEventService {
     private EventRepository eventRepository;
 
     public void addParticipantToEventByEventId(String email, Long eventId) {
-        MyUser user = userRepository.findByEmail(email);
-        Optional<Event> eventOpt = eventRepository.findById(eventId);
-        if (eventOpt.isPresent()) {
-            Event event = eventOpt.get();
-            if (event.getParticipantsNumber() < event.getMaxParticipantsNumber()) {
-                if (!event.getParticipants().contains(user)) {
-                    event.addParticipant(user);
-                    eventRepository.save(event);
-                }else {
-                    throw new RuntimeException("You are already participating in that event");
-                }
-            }else {
-                throw new RuntimeException("To many participants already joined this event");
+        Optional<MyUser> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new NotExistException("User", "email");
+        }
+        Optional<Event> event = eventRepository.findById(eventId);
+        if (event.isEmpty()) {
+            throw new NotExistException("Event", "id");
+        }
+        if (event.get().getParticipantsNumber() < event.get().getMaxParticipantsNumber()) {
+            if (!event.get().getParticipants().contains(user.get())) {
+                event.get().addParticipant(user.get());
+                eventRepository.save(event.get());
+            } else {
+                throw new RuntimeException("You are already participating in this event");
             }
-        }else{
-            throw new NotExistException("Event with provided id does not exist");
+        } else {
+            throw new RuntimeException("Too many participants already joined this event");
         }
     }
 
     public void deleteParticipantFromEventByEventId(String email, Long eventId) {
-        MyUser user = userRepository.findByEmail(email);
-        Optional<Event> eventOpt = eventRepository.findById(eventId);
-        if (eventOpt.isPresent()) {
-            Event event = eventOpt.get();
-            if (event.getParticipants().contains(user)) {
-                event.deleteParticipant(user);
-                eventRepository.save(event);
-            }else {
-                throw new RuntimeException("You have not yet participated in that event");
-            }
-        }else{
-            throw new NotExistException("Event with provided id does not exist");
+        Optional<MyUser> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new NotExistException("User", "email");
+        }
+        Optional<Event> event = eventRepository.findById(eventId);
+        if (event.isEmpty()) {
+            throw new NotExistException("Event", "id");
+        }
+        if (event.get().getParticipants().contains(user.get())) {
+            event.get().deleteParticipant(user.get());
+            eventRepository.save(event.get());
+        } else {
+            throw new RuntimeException("You have not yet participated in this event");
         }
     }
 
     public List<EventInListResponse> getUserEvents(String email) {
-        MyUser user = userRepository.findByEmail(email);
-        Set<Event> eventList = user.getEvents();
-        List<EventInListResponse> responseList = new ArrayList<EventInListResponse>();
+        Optional<MyUser> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new NotExistException("User", "email");
+        }
+        Set<Event> eventList = user.get().getEvents();
+        List<EventInListResponse> responseList = new ArrayList<>();
         for (Event event: eventList) {
             responseList.add(new EventInListResponse(event));
         }

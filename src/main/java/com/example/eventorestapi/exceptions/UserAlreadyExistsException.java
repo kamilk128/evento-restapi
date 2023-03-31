@@ -1,7 +1,7 @@
 package com.example.eventorestapi.exceptions;
 
 public class UserAlreadyExistsException extends RuntimeException {
-    public UserAlreadyExistsException(String message) {
-        super(message);
+    public UserAlreadyExistsException(String field) {
+        super(field + " already taken");
     }
 }

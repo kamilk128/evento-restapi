@@ -28,7 +28,7 @@ public class ModifyEventRequest {
     private String description;
 
 
-    public void modifyEvent(Event event){
+    public void modifyEvent(Event event) {
         event.setName(name);
         event.setCategory(category);
         event.setImageURL(imageURL);

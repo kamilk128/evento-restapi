@@ -25,7 +25,7 @@ public class CreateEventRequest {
     private String description;
 
 
-    public Event toEvent(){
+    public Event toEvent() {
         Event event = new Event();
         event.setName(name);
         event.setCategory(category);

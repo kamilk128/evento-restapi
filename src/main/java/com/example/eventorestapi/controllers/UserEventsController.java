@@ -1,8 +1,6 @@
 package com.example.eventorestapi.controllers;
 
-import com.example.eventorestapi.models.MyUser;
 import com.example.eventorestapi.payload.request.EventIdRequest;
-import com.example.eventorestapi.service.EventService;
 import com.example.eventorestapi.service.UserEventService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
