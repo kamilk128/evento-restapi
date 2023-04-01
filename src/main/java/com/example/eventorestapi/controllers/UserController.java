@@ -9,8 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-//@CrossOrigin(origins = {"http://localhost:5173", "https://evento-krqply.netlify.app"})
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
 @RequestMapping("/api/user")
 public class UserController {

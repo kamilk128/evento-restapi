@@ -20,8 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-//@CrossOrigin(origins = {"http://localhost:5173", "https://evento-krqply.netlify.app"})
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
