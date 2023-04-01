@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class EventInfoResponse {
 
-    Long eventId;
+    Long id;
     private String name;
     private String author;
     private String category;
@@ -22,13 +22,13 @@ public class EventInfoResponse {
     private List<String> participantsUsernames;
 
     public EventInfoResponse(Event event) {
-        this.eventId = event.getId();
+        this.id = event.getId();
         this.name = event.getName();
         this.author = event.getAuthor().getUsername();
         this.category = event.getCategory();
         this.imageURL = event.getImageURL();
-        this.startDate = event.getStartDate().getTime();
-        this.endDate = event.getEndDate().getTime();
+        this.startDate = event.getStartDate();
+        this.endDate = event.getEndDate();
         this.marker = event.getMarker();
         this.participantsNumber = event.getParticipantsNumber();
         this.maxParticipantsNumber = event.getMaxParticipantsNumber();
@@ -36,12 +36,12 @@ public class EventInfoResponse {
         this.participantsUsernames = event.getParticipants().stream().map(MyUser::getUsername).collect(Collectors.toList());
     }
 
-    public Long getEventId() {
-        return eventId;
+    public Long getId() {
+        return id;
     }
 
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

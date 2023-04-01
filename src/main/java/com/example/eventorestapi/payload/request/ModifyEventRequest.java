@@ -9,7 +9,7 @@ import java.util.Date;
 public class ModifyEventRequest {
 
     @NotNull(message = "eventId is required.")
-    private Long eventId;
+    private Long id;
     @NotBlank(message = "name is required.")
     private String name;
     @NotBlank(message = "category is required.")
@@ -32,19 +32,19 @@ public class ModifyEventRequest {
         event.setName(name);
         event.setCategory(category);
         event.setImageURL(imageURL);
-        event.setStartDate(new Date(startDate));
-        event.setEndDate(new Date(endDate));
+        event.setStartDate(startDate);
+        event.setEndDate(endDate);
         event.setMarker(marker);
         event.setMaxParticipantsNumber(maxParticipantsNumber);
         event.setDescription(description);
     }
 
-    public Long getEventId() {
-        return eventId;
+    public Long getId() {
+        return id;
     }
 
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

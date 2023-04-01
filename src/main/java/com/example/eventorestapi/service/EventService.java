@@ -6,47 +6,77 @@ import com.example.eventorestapi.models.Event;
 import com.example.eventorestapi.payload.request.ModifyEventRequest;
 import com.example.eventorestapi.payload.response.EventInListResponse;
 import com.example.eventorestapi.payload.response.EventInfoResponse;
+import com.example.eventorestapi.payload.response.EventPageResponse;
 import com.example.eventorestapi.repository.EventRepository;
+import com.example.eventorestapi.specifications.EventSortType;
 import com.example.eventorestapi.specifications.EventSpecification;
+import com.example.eventorestapi.specifications.Filter;
+import com.example.eventorestapi.specifications.FilterOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
-    public List<EventInListResponse> getEvents(int pageNumber, int pageSize, String sortBy, String filter) {
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+    public EventPageResponse getEvents(int pageNumber, int pageSize, String sortBy, String name, String filter) {
+        PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
+        EventSpecification spec = new EventSpecification();
 
-        if (sortBy != null) {
-            Sort sort = Sort.by(sortBy).ascending();
+        if (sortBy != null && !sortBy.isEmpty()) {
+            EventSortType eventSortType;
+            Sort sort = null;
+            try {
+                eventSortType = EventSortType.valueOf(sortBy.toUpperCase());
+            } catch (IllegalArgumentException ex) {
+                throw new RuntimeException("provided sort type is not allowed");
+            }
+            switch (eventSortType) {
+                case SOONEST -> {
+                    sort = Sort.by("startDate").ascending();
+                    spec.addFilter(new Filter("startDate", new Date().getTime(), FilterOperator.GREATER_THAN));
+                }
+                case POPULARITY -> sort = Sort.by("participantsNumber").ascending();
+                default -> {
+                }
+            }
             pageRequest = pageRequest.withSort(sort);
         }
 
         Page<Event> eventPage;
-        if (filter != null) {
-            EventSpecification spec = new EventSpecification("category", filter);
+        if (filter != null && !filter.isEmpty()) {
+            spec.addFilter(new Filter("category", filter));
+        }
+        if (name != null && !name.isEmpty()) {
+            spec.addFilter(new Filter("name", name));
+        }
+
+        if (!spec.getFilters().isEmpty()){
             eventPage = eventRepository.findAll(spec, pageRequest);
-        } else {
+        }
+        else {
             eventPage = eventRepository.findAll(pageRequest);
         }
+
         List<Event> eventList = eventPage.getContent();
-
-
         List<EventInListResponse> responseList = new ArrayList<>();
         for (Event event: eventList) {
             responseList.add(new EventInListResponse(event));
         }
-        return responseList;
+
+
+        Map<String, Long> info = new HashMap<>();
+        info.put("results", eventPage.getTotalElements());
+        info.put("pages", (long) eventPage.getTotalPages());
+        info.put("currentPage", (long) eventPage.getNumber()+1);
+
+        return new EventPageResponse(info, responseList);
     }
 
     public EventInfoResponse getEventById(Long id) {
@@ -75,7 +105,7 @@ public class EventService {
     }
 
     public void modifyEvent(String user, ModifyEventRequest modifyEventRequest) {
-        Optional<Event> event = eventRepository.findById(modifyEventRequest.getEventId());
+        Optional<Event> event = eventRepository.findById(modifyEventRequest.getId());
         if (event.isEmpty()) {
             throw new NotExistException("Event", "id");
         }

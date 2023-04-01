@@ -2,7 +2,6 @@ package com.example.eventorestapi.models;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,10 +26,10 @@ public class Event {
     private String imageURL;
 
     @Column(nullable = false)
-    private Date startDate;
+    private Long startDate;
 
     @Column(nullable = false)
-    private Date endDate;
+    private Long endDate;
 
     private double[] marker;
     private Long participantsNumber;
@@ -78,19 +77,19 @@ public class Event {
         this.imageURL = imageURL;
     }
 
-    public Date getStartDate() {
+    public Long getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Long startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public Long getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Long endDate) {
         this.endDate = endDate;
     }
 

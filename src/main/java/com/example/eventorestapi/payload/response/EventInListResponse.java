@@ -4,25 +4,25 @@ import com.example.eventorestapi.models.Event;
 
 public class EventInListResponse {
 
-    Long eventId;
+    Long id;
     private String name;
     private String author;
     private String imageURL;
     private Long participantsNumber;
     public EventInListResponse(Event event) {
-        this.eventId = event.getId();
+        this.id = event.getId();
         this.name = event.getName();
         this.author = event.getAuthor().getUsername();
         this.imageURL = event.getImageURL();
         this.participantsNumber = event.getParticipantsNumber();
     }
 
-    public Long getEventId() {
-        return eventId;
+    public Long getId() {
+        return id;
     }
 
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

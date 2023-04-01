@@ -9,7 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = {"http://localhost:5173", "https://evento-krqply.netlify.app"})
+//@CrossOrigin(origins = {"http://localhost:5173", "https://evento-krqply.netlify.app"})
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/user-events")
 public class UserEventsController {
@@ -23,13 +24,13 @@ public class UserEventsController {
 
     @PostMapping("")
     public ResponseEntity<?> joinEvent(Authentication authentication, @Valid @RequestBody EventIdRequest eventIdRequest) {
-        userEventService.addParticipantToEventByEventId(authentication.getName(), eventIdRequest.getEventId());
+        userEventService.addParticipantToEventByEventId(authentication.getName(), eventIdRequest.getId());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("")
     public ResponseEntity<?> quitEvent(Authentication authentication, @Valid @RequestBody EventIdRequest eventIdRequest) {
-        userEventService.deleteParticipantFromEventByEventId(authentication.getName(), eventIdRequest.getEventId());
+        userEventService.deleteParticipantFromEventByEventId(authentication.getName(), eventIdRequest.getId());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

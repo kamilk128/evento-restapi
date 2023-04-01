@@ -30,8 +30,8 @@ public class CreateEventRequest {
         event.setName(name);
         event.setCategory(category);
         event.setImageURL(imageURL);
-        event.setStartDate(new Date(startDate));
-        event.setEndDate(new Date(endDate));
+        event.setStartDate(startDate);
+        event.setEndDate(endDate);
         event.setMarker(marker);
         event.setMaxParticipantsNumber(maxParticipantsNumber);
         event.setDescription(description);

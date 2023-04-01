@@ -9,7 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = {"http://localhost:5173", "https://evento-krqply.netlify.app"})
+//@CrossOrigin(origins = {"http://localhost:5173", "https://evento-krqply.netlify.app"})
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/friends")
 public class FriendController {

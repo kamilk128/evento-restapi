@@ -4,13 +4,13 @@ import jakarta.validation.constraints.NotNull;
 
 public class EventIdRequest {
     @NotNull(message = "eventId is required.")
-    private Long eventId;
+    private Long id;
 
-    public Long getEventId() {
-        return eventId;
+    public Long getId() {
+        return id;
     }
 
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

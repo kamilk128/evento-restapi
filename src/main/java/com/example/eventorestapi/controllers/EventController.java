@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@CrossOrigin(origins = {"http://localhost:5173", "https://evento-krqply.netlify.app"})
+//@CrossOrigin(origins = {"http://localhost:5173", "https://evento-krqply.netlify.app"})
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
@@ -32,8 +33,8 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping("")
-    public ResponseEntity<?> getEvents(@RequestParam(name = "page", required=false, defaultValue = "0") int page,@RequestParam(name = "pageSize", required=false, defaultValue = "10") int pageSize, @RequestParam(name = "sort-by", required=false) String sortBy, @RequestParam(name = "filter", required=false) String filter) {
-        return ResponseEntity.ok(eventService.getEvents(page, pageSize, sortBy, filter));
+    public ResponseEntity<?> getEvents(@RequestParam(name = "page", required=false, defaultValue = "1") int page, @RequestParam(name = "pageSize", required=false, defaultValue = "10") int pageSize, @RequestParam(name = "sort-by", required=false) String sortBy, @RequestParam(name = "name", required=false) String name, @RequestParam(name = "filter", required=false) String filter) {
+        return ResponseEntity.ok(eventService.getEvents(page, pageSize, sortBy, name,  filter));
     }
 
     @GetMapping("/{id}")
@@ -70,7 +71,7 @@ public class EventController {
     @DeleteMapping("")
     public ResponseEntity<?> deleteEvent(Authentication authentication, @Valid @RequestBody EventIdRequest eventIdRequest) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        eventService.deleteEvent(userDetails.getNick(), eventIdRequest.getEventId());
+        eventService.deleteEvent(userDetails.getNick(), eventIdRequest.getId());
         return ResponseEntity.ok().build();
     }
 }

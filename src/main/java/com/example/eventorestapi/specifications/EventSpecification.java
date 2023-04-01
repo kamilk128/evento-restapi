@@ -7,19 +7,36 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
-public class EventSpecification implements Specification<Event> {
-    private final String propertyName;
-    private final Object filterValue;
+import java.util.ArrayList;
+import java.util.List;
 
-    public EventSpecification(String propertyName, Object filterValue) {
-        this.propertyName = propertyName;
-        this.filterValue = filterValue;
+public class EventSpecification implements Specification<Event> {
+    private final List<Filter> filters = new ArrayList<>();
+
+    public void addFilter(Filter filter) {
+        filters.add(filter);
     }
 
     public Predicate toPredicate(Root<Event> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
-        if (filterValue != null) {
-            return builder.equal(root.get(propertyName), filterValue);
+        Predicate predicate = null;
+        for (Filter filter : filters) {
+            if (filter.getValue() != null) {
+                Predicate newPredicate = switch (filter.getOperator()) {
+                    case EQUALS -> builder.equal(root.get(filter.getPropertyName()), filter.getValue());
+                    case GREATER_THAN -> builder.greaterThan(root.get(filter.getPropertyName()), (Long) filter.getValue());
+                    case LESS_THAN -> builder.lessThan(root.get(filter.getPropertyName()), (Long) filter.getValue());
+                };
+                if (predicate != null) {
+                    predicate = builder.and(predicate, newPredicate);
+                } else {
+                    predicate = newPredicate;
+                }
+            }
         }
-        return null;
+        return predicate;
+    }
+
+    public List<Filter> getFilters() {
+        return filters;
     }
 }
