@@ -4,8 +4,6 @@ import com.example.eventorestapi.models.Event;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Date;
-
 public class ModifyEventRequest {
 
     @NotNull(message = "eventId is required.")
@@ -31,7 +29,7 @@ public class ModifyEventRequest {
     public void modifyEvent(Event event) {
         event.setName(name);
         event.setCategory(category);
-        event.setImageURL(imageURL);
+        event.setImageUrl(imageURL);
         event.setStartDate(startDate);
         event.setEndDate(endDate);
         event.setMarker(marker);

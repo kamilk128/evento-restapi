@@ -4,8 +4,6 @@ import com.example.eventorestapi.models.Event;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Date;
-
 public class CreateEventRequest {
     @NotBlank(message = "name is required.")
     private String name;
@@ -29,7 +27,7 @@ public class CreateEventRequest {
         Event event = new Event();
         event.setName(name);
         event.setCategory(category);
-        event.setImageURL(imageURL);
+        event.setImageUrl(imageURL);
         event.setStartDate(startDate);
         event.setEndDate(endDate);
         event.setMarker(marker);

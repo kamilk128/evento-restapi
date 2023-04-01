@@ -7,13 +7,13 @@ public class EventInListResponse {
     Long id;
     private String name;
     private String author;
-    private String imageURL;
+    private String imageUrl;
     private Long participantsNumber;
     public EventInListResponse(Event event) {
         this.id = event.getId();
         this.name = event.getName();
         this.author = event.getAuthor().getUsername();
-        this.imageURL = event.getImageURL();
+        this.imageUrl = event.getImageUrl();
         this.participantsNumber = event.getParticipantsNumber();
     }
 
@@ -41,12 +41,12 @@ public class EventInListResponse {
         this.author = author;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Long getParticipantsNumber() {

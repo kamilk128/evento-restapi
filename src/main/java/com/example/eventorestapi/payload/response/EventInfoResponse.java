@@ -12,7 +12,7 @@ public class EventInfoResponse {
     private String name;
     private String author;
     private String category;
-    private String imageURL;
+    private String imageUrl;
     private Long startDate;
     private Long endDate;
     private double[] marker;
@@ -26,7 +26,7 @@ public class EventInfoResponse {
         this.name = event.getName();
         this.author = event.getAuthor().getUsername();
         this.category = event.getCategory();
-        this.imageURL = event.getImageURL();
+        this.imageUrl = event.getImageUrl();
         this.startDate = event.getStartDate();
         this.endDate = event.getEndDate();
         this.marker = event.getMarker();
@@ -68,12 +68,12 @@ public class EventInfoResponse {
         this.category = category;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Long getStartDate() {

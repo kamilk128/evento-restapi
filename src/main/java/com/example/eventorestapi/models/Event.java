@@ -23,7 +23,7 @@ public class Event {
     private String category;
 
     @Column(nullable = false)
-    private String imageURL;
+    private String imageUrl;
 
     @Column(nullable = false)
     private Long startDate;
@@ -69,12 +69,12 @@ public class Event {
         this.category = category;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageUrl(String imageURL) {
+        this.imageUrl = imageURL;
     }
 
     public Long getStartDate() {
