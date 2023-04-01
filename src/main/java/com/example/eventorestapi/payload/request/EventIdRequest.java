@@ -3,7 +3,7 @@ package com.example.eventorestapi.payload.request;
 import jakarta.validation.constraints.NotNull;
 
 public class EventIdRequest {
-    @NotNull(message = "eventId is required.")
+    @NotNull(message = "id is required.")
     private Long id;
 
     public Long getId() {

@@ -6,14 +6,14 @@ import jakarta.validation.constraints.NotNull;
 
 public class ModifyEventRequest {
 
-    @NotNull(message = "eventId is required.")
+    @NotNull(message = "id is required.")
     private Long id;
     @NotBlank(message = "name is required.")
     private String name;
     @NotBlank(message = "category is required.")
     private String category;
-    @NotBlank(message = "imageURL is required.")
-    private String imageURL;
+    @NotBlank(message = "imageUrl is required.")
+    private String imageUrl;
     @NotNull(message = "startDate is required.")
     private Long startDate;
     @NotNull(message = "endDate is required.")
@@ -29,7 +29,7 @@ public class ModifyEventRequest {
     public void modifyEvent(Event event) {
         event.setName(name);
         event.setCategory(category);
-        event.setImageUrl(imageURL);
+        event.setImageUrl(imageUrl);
         event.setStartDate(startDate);
         event.setEndDate(endDate);
         event.setMarker(marker);
@@ -61,12 +61,12 @@ public class ModifyEventRequest {
         this.category = category;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Long getStartDate() {

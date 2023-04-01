@@ -1,0 +1,13 @@
+
+STOP
+sudo docker container ls &&
+sudo docker stop $(sudo docker container ls -q -n=1) &&
+rm -R src
+
+UPLOAD src.zip
+
+RUN
+unzip src.zip &&
+rm src.zip &&
+sudo docker build -t evento-image .
+sudo docker run -p 8080:8080 evento-image &

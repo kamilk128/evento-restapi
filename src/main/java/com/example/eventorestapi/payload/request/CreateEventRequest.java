@@ -9,8 +9,8 @@ public class CreateEventRequest {
     private String name;
     @NotBlank(message = "category is required.")
     private String category;
-    @NotBlank(message = "imageURL is required.")
-    private String imageURL;
+    @NotBlank(message = "imageUrl is required.")
+    private String imageUrl;
     @NotNull(message = "startDate is required.")
     private Long startDate;
     @NotNull(message = "endDate is required.")
@@ -27,7 +27,7 @@ public class CreateEventRequest {
         Event event = new Event();
         event.setName(name);
         event.setCategory(category);
-        event.setImageUrl(imageURL);
+        event.setImageUrl(imageUrl);
         event.setStartDate(startDate);
         event.setEndDate(endDate);
         event.setMarker(marker);
@@ -52,12 +52,12 @@ public class CreateEventRequest {
         this.category = category;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Long getStartDate() {
