@@ -30,7 +30,7 @@ public class UserEventService {
         if (event.isEmpty()) {
             throw new NotExistException("Event", "id");
         }
-        if (event.get().getParticipantsNumber() < event.get().getMaxParticipantsNumber()) {
+        if (event.get().getMaxParticipantsNumber() == null || event.get().getParticipantsNumber() < event.get().getMaxParticipantsNumber()) {
             if (!event.get().getParticipants().contains(user.get())) {
                 event.get().addParticipant(user.get());
                 eventRepository.save(event.get());

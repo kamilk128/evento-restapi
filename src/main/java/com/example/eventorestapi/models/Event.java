@@ -28,9 +28,7 @@ public class Event {
     @Column(nullable = false)
     private Long startDate;
 
-    @Column(nullable = false)
     private Long endDate;
-
     private double[] marker;
     private Long participantsNumber;
     private Long maxParticipantsNumber;

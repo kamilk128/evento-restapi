@@ -30,6 +30,7 @@ build/
 out/
 gradlew
 gradlew.bat
+.env
 
 
 

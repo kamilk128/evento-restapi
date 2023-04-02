@@ -13,11 +13,9 @@ public class CreateEventRequest {
     private String imageUrl;
     @NotNull(message = "startDate is required.")
     private Long startDate;
-    @NotNull(message = "endDate is required.")
     private Long endDate;
     @NotNull(message = "marker is required.")
     private double[] marker;
-    @NotNull(message = "maxParticipantsNumber is required.")
     private Long maxParticipantsNumber;
     @NotBlank(message = "description is required.")
     private String description;
