@@ -4,7 +4,6 @@ import com.example.eventorestapi.exceptions.NotExistException;
 import com.example.eventorestapi.models.Event;
 import com.example.eventorestapi.models.MyUser;
 import com.example.eventorestapi.payload.request.CreateEventRequest;
-import com.example.eventorestapi.payload.request.EventIdRequest;
 import com.example.eventorestapi.payload.request.ModifyEventRequest;
 import com.example.eventorestapi.security.service.UserDetailsImpl;
 import com.example.eventorestapi.service.EventService;
