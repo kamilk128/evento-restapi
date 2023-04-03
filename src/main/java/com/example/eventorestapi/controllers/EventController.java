@@ -8,6 +8,7 @@ import com.example.eventorestapi.payload.request.EventIdRequest;
 import com.example.eventorestapi.payload.request.ModifyEventRequest;
 import com.example.eventorestapi.security.service.UserDetailsImpl;
 import com.example.eventorestapi.service.EventService;
+import com.example.eventorestapi.service.UserEventService;
 import com.example.eventorestapi.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,10 @@ public class EventController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private EventService eventService;
+    @Autowired
+    private UserEventService userEventService;
 
     @GetMapping("")
     public ResponseEntity<?> getEvents(@RequestParam(name = "page", required=false, defaultValue = "1") int page, @RequestParam(name = "pageSize", required=false, defaultValue = "10") int pageSize, @RequestParam(name = "sort-by", required=false) String sortBy, @RequestParam(name = "name", required=false) String name, @RequestParam(name = "filter", required=false) String filter) {
@@ -54,9 +56,15 @@ public class EventController {
         }
         event.setAuthor(author.get());
         event.setParticipantsNumber(0L);
+        if (event.getEndDate() != null){
+            if (event.getEndDate() <= event.getStartDate()){
+                throw new RuntimeException("endDate should be later than startDate");
+            }
+        }
         Long id = eventService.createEvent(event);
+        userEventService.addParticipantToEventByEventId(authentication.getName(), id);
         Map<String, String> body = new HashMap<>();
-        body.put("eventId", id.toString());
+        body.put("id", id.toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(body);
     }
 
@@ -67,10 +75,10 @@ public class EventController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("")
-    public ResponseEntity<?> deleteEvent(Authentication authentication, @Valid @RequestBody EventIdRequest eventIdRequest) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteEvent(Authentication authentication, @PathVariable Long id) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        eventService.deleteEvent(userDetails.getNick(), eventIdRequest.getId());
+        eventService.deleteEvent(userDetails.getNick(), id);
         return ResponseEntity.ok().build();
     }
 }

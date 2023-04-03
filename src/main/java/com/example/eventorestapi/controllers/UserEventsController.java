@@ -21,15 +21,15 @@ public class UserEventsController {
         return ResponseEntity.status(HttpStatus.OK).body(userEventService.getUserEvents(authentication.getName()));
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> joinEvent(Authentication authentication, @Valid @RequestBody EventIdRequest eventIdRequest) {
-        userEventService.addParticipantToEventByEventId(authentication.getName(), eventIdRequest.getId());
+    @PostMapping("/{id}")
+    public ResponseEntity<?> joinEvent(Authentication authentication, @PathVariable Long id) {
+        userEventService.addParticipantToEventByEventId(authentication.getName(), id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping("")
-    public ResponseEntity<?> quitEvent(Authentication authentication, @Valid @RequestBody EventIdRequest eventIdRequest) {
-        userEventService.deleteParticipantFromEventByEventId(authentication.getName(), eventIdRequest.getId());
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> quitEvent(Authentication authentication, @PathVariable Long id) {
+        userEventService.deleteParticipantFromEventByEventId(authentication.getName(), id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

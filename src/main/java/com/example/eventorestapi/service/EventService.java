@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -87,6 +88,7 @@ public class EventService {
         return new EventInfoResponse(event.get());
     }
 
+    @Transactional
     public Long createEvent(Event event) {
         Event createdEvent = eventRepository.saveAndFlush(event);
         return createdEvent.getId();
