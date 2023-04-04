@@ -53,10 +53,15 @@ public class FriendService {
         if (user.equals(friend)) {
             throw new RuntimeException("You cannot remove yourself from friends");
         }
-        if (!user.get().invitedFriend(friend.get())) {
-            throw new RuntimeException("You have not sent this user a friend request");
+        if (!user.get().invitedFriend(friend.get()) && !friend.get().invitedFriend(user.get())) {
+            throw new RuntimeException("You have not exchanged friend requests with this user");
         }
-        user.get().removeFriend(friend.get());
+        if (user.get().invitedFriend(friend.get())) {
+            user.get().removeFriend(friend.get());
+        }
+        if (friend.get().invitedFriend(user.get())) {
+            friend.get().removeFriend(user.get());
+        }
         userRepository.save(user.get());
     }
 

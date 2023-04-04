@@ -3,10 +3,12 @@ package com.example.eventorestapi.service;
 import com.example.eventorestapi.exceptions.NotExistException;
 import com.example.eventorestapi.exceptions.UnauthorizedException;
 import com.example.eventorestapi.models.Event;
+import com.example.eventorestapi.models.EventInvite;
 import com.example.eventorestapi.payload.request.ModifyEventRequest;
 import com.example.eventorestapi.payload.response.EventInListResponse;
 import com.example.eventorestapi.payload.response.EventInfoResponse;
 import com.example.eventorestapi.payload.response.EventPageResponse;
+import com.example.eventorestapi.repository.EventInviteRepository;
 import com.example.eventorestapi.repository.EventRepository;
 import com.example.eventorestapi.specifications.EventSortType;
 import com.example.eventorestapi.specifications.EventSpecification;
@@ -25,6 +27,8 @@ import java.util.*;
 public class EventService {
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private EventInviteRepository eventInviteRepository;
 
     public EventPageResponse getEvents(int pageNumber, int pageSize, String sortBy, String name, String filter) {
         PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
@@ -80,12 +84,17 @@ public class EventService {
         return new EventPageResponse(info, responseList);
     }
 
-    public EventInfoResponse getEventById(Long id) {
+    public EventInfoResponse getEventById(String email, Long id) {
         Optional<Event> event = eventRepository.findById(id);
         if (event.isEmpty()) {
             throw new NotExistException("Event", "id");
         }
-        return new EventInfoResponse(event.get());
+        List<EventInvite> inviteList = eventInviteRepository.findByInviteeEmailAndEventId(email, id);
+        List<String> invitedBy = new ArrayList<>();
+        for (EventInvite invite: inviteList) {
+            invitedBy.add(invite.getInviter().getUsername());
+        }
+        return new EventInfoResponse(event.get(), invitedBy);
     }
 
     @Transactional

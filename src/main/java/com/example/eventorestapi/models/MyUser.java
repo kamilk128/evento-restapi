@@ -115,7 +115,11 @@ public class MyUser {
         friend.getFriendOf().remove(this);
     }
 
-    public Boolean invitedFriend(MyUser friend) {
+    public boolean invitedFriend(MyUser friend) {
         return friends.contains(friend);
+    }
+
+    public boolean participatesInEvent(Event event) {
+        return events.contains(event);
     }
 }

@@ -19,9 +19,10 @@ public class EventInfoResponse {
     private Long participantsNumber;
     private Long maxParticipantsNumber;
     private String description;
+    private List<String> invitedBy;
     private List<String> participantsUsernames;
 
-    public EventInfoResponse(Event event) {
+    public EventInfoResponse(Event event, List<String> invitedBy) {
         this.id = event.getId();
         this.name = event.getName();
         this.author = event.getAuthor().getUsername();
@@ -33,6 +34,7 @@ public class EventInfoResponse {
         this.participantsNumber = event.getParticipantsNumber();
         this.maxParticipantsNumber = event.getMaxParticipantsNumber();
         this.description = event.getDescription();
+        this.invitedBy = invitedBy;
         this.participantsUsernames = event.getParticipants().stream().map(MyUser::getUsername).collect(Collectors.toList());
     }
 
@@ -122,6 +124,14 @@ public class EventInfoResponse {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<String> getInvitedBy() {
+        return invitedBy;
+    }
+
+    public void setInvitedBy(List<String> invitedBy) {
+        this.invitedBy = invitedBy;
     }
 
     public List<String> getParticipantsUsernames() {

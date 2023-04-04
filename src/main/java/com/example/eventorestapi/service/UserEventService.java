@@ -4,6 +4,7 @@ import com.example.eventorestapi.exceptions.NotExistException;
 import com.example.eventorestapi.models.Event;
 import com.example.eventorestapi.models.MyUser;
 import com.example.eventorestapi.payload.response.EventInListResponse;
+import com.example.eventorestapi.repository.EventInviteRepository;
 import com.example.eventorestapi.repository.EventRepository;
 import com.example.eventorestapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class UserEventService {
     private UserRepository userRepository;
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private EventInviteRepository eventInviteRepository;
 
     public void addParticipantToEventByEventId(String email, Long eventId) {
         Optional<MyUser> user = userRepository.findByEmail(email);
@@ -34,6 +37,7 @@ public class UserEventService {
             if (!event.get().getParticipants().contains(user.get())) {
                 event.get().addParticipant(user.get());
                 eventRepository.save(event.get());
+                eventInviteRepository.deleteAll(eventInviteRepository.findByInviteeEmailAndEventId(email, eventId));
             } else {
                 throw new RuntimeException("You are already participating in this event");
             }

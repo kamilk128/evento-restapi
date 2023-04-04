@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecificationExecutor<Event> {
-    Event findByAuthor(String author);
-    boolean existsByAuthor(String author);
+
 }

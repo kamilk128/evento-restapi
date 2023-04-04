@@ -38,11 +38,11 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getEvent(@PathVariable Long id) {
+    public ResponseEntity<?> getEvent(Authentication authentication, @PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
         } else {
-            return ResponseEntity.ok(eventService.getEventById(id));
+            return ResponseEntity.ok(eventService.getEventById(authentication.getName(), id));
         }
     }
 
