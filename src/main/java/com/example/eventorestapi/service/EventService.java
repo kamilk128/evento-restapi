@@ -47,7 +47,7 @@ public class EventService {
                     sort = Sort.by("startDate").ascending();
                     spec.addFilter(new Filter("startDate", new Date().getTime(), FilterOperator.GREATER_THAN));
                 }
-                case POPULARITY -> sort = Sort.by("participantsNumber").ascending();
+                case POPULARITY -> sort = Sort.by("participantsNumber").descending();
                 default -> {
                 }
             }
