@@ -55,6 +55,6 @@ public class RegisterRequest {
     }
 
     public MyUser toUser() {
-        return new MyUser(email, username, password, new Date(dateOfBirth));
+        return new MyUser(email, username, password, dateOfBirth);
     }
 }

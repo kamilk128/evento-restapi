@@ -16,14 +16,14 @@ public class UserDetailsImpl implements UserDetails {
 
     private String nick; //username
 
-    private Date dateOfBirth;
+    private Long dateOfBirth;
 
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String nick, String password, Date dateOfBirth,
+    public UserDetailsImpl(Long id, String username, String nick, String password, Long dateOfBirth,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
@@ -57,7 +57,7 @@ public class UserDetailsImpl implements UserDetails {
         return nick;
     }
 
-    public Date getDateOfBirth() {
+    public Long getDateOfBirth() {
         return dateOfBirth;
     }
 

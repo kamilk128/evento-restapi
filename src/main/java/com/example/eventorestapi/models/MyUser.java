@@ -19,7 +19,7 @@ public class MyUser {
     @Column(nullable = false)
     private String password;
 
-    private Date dateOfBirth;
+    private Long dateOfBirth;
 
     @ManyToMany
     @JoinTable(name = "user_event",
@@ -39,7 +39,7 @@ public class MyUser {
     private Set<MyUser> friendOf = new HashSet<>();
 
 
-    public MyUser(String email, String username, String password, Date dateOfBirth) {
+    public MyUser(String email, String username, String password, Long dateOfBirth) {
         this.email = email;
         this.username = username;
         this.password = password;
@@ -50,7 +50,7 @@ public class MyUser {
         this.email = "";
         this.username = "";
         this.password = "";
-        this.dateOfBirth = new Date(0);
+        this.dateOfBirth = 0L;
     }
 
     public void setPassword(String hashedPassword) {
@@ -65,7 +65,7 @@ public class MyUser {
         this.username = nick;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(Long dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -85,7 +85,7 @@ public class MyUser {
         return id;
     }
 
-    public Date getDateOfBirth() {
+    public Long getDateOfBirth() {
         return dateOfBirth;
     }
 

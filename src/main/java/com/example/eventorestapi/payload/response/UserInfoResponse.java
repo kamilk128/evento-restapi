@@ -13,7 +13,7 @@ public class UserInfoResponse {
         this.id = userDetails.getId();
         this.username = userDetails.getNick();
         this.email = userDetails.getUsername();
-        this.dateOfBirth = userDetails.getDateOfBirth().getTime();
+        this.dateOfBirth = userDetails.getDateOfBirth();
         this.token = token;
     }
 
