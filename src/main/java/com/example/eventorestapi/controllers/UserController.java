@@ -33,5 +33,10 @@ public class UserController {
         }
     }
 
+    @GetMapping("/is-token-valid")
+    public ResponseEntity<?> isTokenValid() {
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 
 }
