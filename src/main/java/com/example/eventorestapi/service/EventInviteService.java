@@ -5,16 +5,16 @@ import com.example.eventorestapi.models.Event;
 import com.example.eventorestapi.models.EventInvite;
 import com.example.eventorestapi.models.MyUser;
 import com.example.eventorestapi.payload.request.EventInviteRequest;
-import com.example.eventorestapi.payload.response.EventIdInListResponse;
+import com.example.eventorestapi.payload.response.EventInListResponse;
+import com.example.eventorestapi.payload.response.EventPageResponse;
 import com.example.eventorestapi.repository.EventInviteRepository;
 import com.example.eventorestapi.repository.EventRepository;
 import com.example.eventorestapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EventInviteService {
@@ -51,13 +51,23 @@ public class EventInviteService {
         eventInviteRepository.save(invite);
     }
 
-    public List<EventIdInListResponse> getUserInvitations(String email) {
+    public EventPageResponse getUserInvitations(String email, int pageNumber, String name) {
+        final long pageSize = 20;
         List<EventInvite> inviteList = eventInviteRepository.findByInviteeEmail(email);
-        List<EventIdInListResponse> responseList = new ArrayList<>();
+        List<EventInListResponse> responseList = new ArrayList<>();
         for (EventInvite invite: inviteList) {
-            responseList.add(new EventIdInListResponse(invite));
+            responseList.add(new EventInListResponse(invite.getEvent()));
         }
-        return responseList;
+        if (name != null && !name.isEmpty()) {
+            responseList = responseList.stream().filter(event -> event.getName().equals(name)).collect(Collectors.toList());
+        }
+
+        Map<String, Long> info = new HashMap<>();
+        info.put("results", (long) responseList.size());
+
+        responseList = responseList.stream().skip((pageNumber-1) * pageSize).limit(pageSize).collect(Collectors.toList());
+
+        return new EventPageResponse(info, responseList);
     }
 
 }

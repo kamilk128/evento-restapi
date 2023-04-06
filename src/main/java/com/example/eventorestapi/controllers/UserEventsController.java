@@ -15,8 +15,8 @@ public class UserEventsController {
     private UserEventService userEventService;
 
     @GetMapping("")
-    public ResponseEntity<?> getUserEventsList(Authentication authentication) {
-        return ResponseEntity.status(HttpStatus.OK).body(userEventService.getUserEvents(authentication.getName()));
+    public ResponseEntity<?> getUserEventsList(Authentication authentication, @RequestParam(name = "page", required=false, defaultValue = "1") int page, @RequestParam(name = "name", required=false) String name) {
+        return ResponseEntity.status(HttpStatus.OK).body(userEventService.getUserEvents(authentication.getName(), page, name));
     }
 
     @PostMapping("/{id}")

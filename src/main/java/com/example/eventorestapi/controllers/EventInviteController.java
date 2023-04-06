@@ -17,8 +17,8 @@ public class EventInviteController {
     private EventInviteService eventInviteService;
 
     @GetMapping("")
-    public ResponseEntity<?> getUserInvitations(Authentication authentication) {
-        return ResponseEntity.status(HttpStatus.OK).body(eventInviteService.getUserInvitations(authentication.getName()));
+    public ResponseEntity<?> getUserInvitations(Authentication authentication, @RequestParam(name = "page", required=false, defaultValue = "1") int page, @RequestParam(name = "name", required=false) String name) {
+        return ResponseEntity.status(HttpStatus.OK).body(eventInviteService.getUserInvitations(authentication.getName(), page, name));
     }
 
     @PostMapping("")

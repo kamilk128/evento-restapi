@@ -54,7 +54,6 @@ public class EventService {
             pageRequest = pageRequest.withSort(sort);
         }
 
-        Page<Event> eventPage;
         if (filter != null && !filter.isEmpty()) {
             spec.addFilter(new Filter("category", filter));
         }
@@ -62,6 +61,7 @@ public class EventService {
             spec.addFilter(new Filter("name", name));
         }
 
+        Page<Event> eventPage;
         if (!spec.getFilters().isEmpty()){
             eventPage = eventRepository.findAll(spec, pageRequest);
         }
@@ -74,7 +74,6 @@ public class EventService {
         for (Event event: eventList) {
             responseList.add(new EventInListResponse(event));
         }
-
 
         Map<String, Long> info = new HashMap<>();
         info.put("results", eventPage.getTotalElements());

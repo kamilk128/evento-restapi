@@ -4,16 +4,15 @@ import com.example.eventorestapi.exceptions.NotExistException;
 import com.example.eventorestapi.models.Event;
 import com.example.eventorestapi.models.MyUser;
 import com.example.eventorestapi.payload.response.EventInListResponse;
+import com.example.eventorestapi.payload.response.EventPageResponse;
 import com.example.eventorestapi.repository.EventInviteRepository;
 import com.example.eventorestapi.repository.EventRepository;
 import com.example.eventorestapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserEventService {
@@ -63,7 +62,8 @@ public class UserEventService {
         }
     }
 
-    public List<EventInListResponse> getUserEvents(String email) {
+    public EventPageResponse getUserEvents(String email, int pageNumber, String name) {
+        final long pageSize = 20;
         Optional<MyUser> user = userRepository.findByEmail(email);
         if (user.isEmpty()) {
             throw new NotExistException("User", "email");
@@ -73,6 +73,15 @@ public class UserEventService {
         for (Event event: eventList) {
             responseList.add(new EventInListResponse(event));
         }
-        return responseList;
+        if (name != null && !name.isEmpty()) {
+            responseList = responseList.stream().filter(event -> event.getName().equals(name)).collect(Collectors.toList());
+        }
+
+        Map<String, Long> info = new HashMap<>();
+        info.put("results", (long) responseList.size());
+
+        responseList = responseList.stream().skip((pageNumber-1) * pageSize).limit(pageSize).collect(Collectors.toList());
+
+        return new EventPageResponse(info, responseList);
     }
 }
