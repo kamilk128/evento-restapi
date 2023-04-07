@@ -3,6 +3,7 @@ package com.example.eventorestapi.models;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -138,4 +139,13 @@ public class Event {
         user.getEvents().remove(this);
         participantsNumber -= 1;
     }
+
+    public void deleteAllParticipant() {
+        for (MyUser user: getParticipants()){
+            user.getEvents().remove(this);
+        }
+        participants.clear();
+        participantsNumber = 0L;
+    }
+
 }

@@ -103,11 +103,14 @@ public class EventService {
     }
 
     public void deleteEvent(String user, Long id) {
-        Optional<Event> event = eventRepository.findById(id);
-        if (event.isEmpty()) {
+        Optional<Event> eventOpt = eventRepository.findById(id);
+        if (eventOpt.isEmpty()) {
             throw new NotExistException("Event", "id");
         }
-        if (Objects.equals(event.get().getAuthor().getUsername(), user)) {
+        Event event = eventOpt.get();
+        if (Objects.equals(event.getAuthor().getUsername(), user)) {
+            event.deleteAllParticipant();
+            eventRepository.save(event);
             eventRepository.deleteById(id);
         } else {
             throw new UnauthorizedException();
