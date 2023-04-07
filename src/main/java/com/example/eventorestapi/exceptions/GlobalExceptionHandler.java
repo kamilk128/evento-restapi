@@ -37,11 +37,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> exception(RuntimeException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage());
+        body.put("details", ex.toString());
+        return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> exception(Exception ex) {
         Map<String, String> body = new HashMap<>();
         body.put("error", ex.getMessage());
         body.put("details", ex.toString());
-        return new ResponseEntity<>(body, new HttpHeaders(), INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
