@@ -21,6 +21,9 @@ public class MyUser {
 
     private Long dateOfBirth;
 
+    @OneToMany(mappedBy = "author")
+    private Set<Event> authoredEvents = new HashSet<>();
+
     @ManyToMany
     @JoinTable(name = "user_event",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -113,6 +116,14 @@ public class MyUser {
     public void removeFriend(MyUser friend) {
         friends.remove(friend);
         friend.getFriendOf().remove(this);
+    }
+
+    public Set<Event> getAuthoredEvents() {
+        return authoredEvents;
+    }
+
+    public void setAuthoredEvents(Set<Event> authoredEvents) {
+        this.authoredEvents = authoredEvents;
     }
 
     public boolean invitedFriend(MyUser friend) {

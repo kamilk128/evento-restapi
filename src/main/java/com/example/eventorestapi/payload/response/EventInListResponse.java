@@ -4,11 +4,11 @@ import com.example.eventorestapi.models.Event;
 
 public class EventInListResponse {
 
-    Long id;
+    private Long id;
     private String name;
     private String author;
     private String imageUrl;
-    private Long participantsNumber;
+    private int participantsNumber;
     public EventInListResponse(Event event) {
         this.id = event.getId();
         this.name = event.getName();
@@ -49,11 +49,11 @@ public class EventInListResponse {
         this.imageUrl = imageUrl;
     }
 
-    public Long getParticipantsNumber() {
+    public int getParticipantsNumber() {
         return participantsNumber;
     }
 
-    public void setParticipantsNumber(Long participantsNumber) {
+    public void setParticipantsNumber(int participantsNumber) {
         this.participantsNumber = participantsNumber;
     }
 }

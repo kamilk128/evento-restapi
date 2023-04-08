@@ -5,6 +5,7 @@ import com.example.eventorestapi.models.Event;
 import com.example.eventorestapi.models.MyUser;
 import com.example.eventorestapi.payload.request.CreateEventRequest;
 import com.example.eventorestapi.payload.request.ModifyEventRequest;
+import com.example.eventorestapi.payload.response.IdResponse;
 import com.example.eventorestapi.security.service.UserDetailsImpl;
 import com.example.eventorestapi.service.EventService;
 import com.example.eventorestapi.service.UserEventService;
@@ -49,22 +50,15 @@ public class EventController {
     @PostMapping("")
     public ResponseEntity<?> addEvent(Authentication authentication, @Valid @RequestBody CreateEventRequest createEventRequest) {
         Event event = createEventRequest.toEvent();
-        Optional<MyUser> author = userService.getUserByEmail(authentication.getName());
-        if (author.isEmpty()) {
+        Optional<MyUser> authorOpt = userService.getUserByEmail(authentication.getName());
+        if (authorOpt.isEmpty()) {
             throw new NotExistException("User", "email");
         }
-        event.setAuthor(author.get());
-        event.setParticipantsNumber(0L);
-        if (event.getEndDate() != null){
-            if (event.getEndDate() <= event.getStartDate()){
-                throw new RuntimeException("endDate should be later than startDate");
-            }
-        }
-        Long id = eventService.createEvent(event);
+        MyUser author = authorOpt.get();
+
+        Long id = eventService.createEvent(author, event);
         userEventService.addParticipantToEventByEventId(authentication.getName(), id);
-        Map<String, String> body = new HashMap<>();
-        body.put("id", id.toString());
-        return ResponseEntity.status(HttpStatus.CREATED).body(body);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new IdResponse(id));
     }
 
     @PutMapping("")

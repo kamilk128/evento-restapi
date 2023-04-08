@@ -4,6 +4,7 @@ import com.example.eventorestapi.exceptions.NotExistException;
 import com.example.eventorestapi.exceptions.UnauthorizedException;
 import com.example.eventorestapi.models.Event;
 import com.example.eventorestapi.models.EventInvite;
+import com.example.eventorestapi.models.MyUser;
 import com.example.eventorestapi.payload.request.ModifyEventRequest;
 import com.example.eventorestapi.payload.response.EventInListResponse;
 import com.example.eventorestapi.payload.response.EventInfoResponse;
@@ -97,7 +98,13 @@ public class EventService {
     }
 
     @Transactional
-    public Long createEvent(Event event) {
+    public Long createEvent(MyUser author, Event event) {
+        if (event.getEndDate() != null){
+            if (event.getEndDate() <= event.getStartDate()){
+                throw new RuntimeException("endDate should be later than startDate");
+            }
+        }
+        event.setAuthor(author);
         Event createdEvent = eventRepository.saveAndFlush(event);
         return createdEvent.getId();
     }
@@ -109,22 +116,32 @@ public class EventService {
         }
         Event event = eventOpt.get();
         if (Objects.equals(event.getAuthor().getUsername(), user)) {
-            event.deleteAllParticipant();
-            eventRepository.save(event);
-            eventRepository.deleteById(id);
+            deleteEvent(event);
         } else {
             throw new UnauthorizedException();
         }
     }
+    @Transactional
+    public void deleteEvent(Event event) {
+        event.deleteAllParticipant();
+        event.removeAuthor();
+        eventRepository.deleteById(event.getId());
+    }
 
     public void modifyEvent(String user, ModifyEventRequest modifyEventRequest) {
-        Optional<Event> event = eventRepository.findById(modifyEventRequest.getId());
-        if (event.isEmpty()) {
+        Optional<Event> eventOpt = eventRepository.findById(modifyEventRequest.getId());
+        if (eventOpt.isEmpty()) {
             throw new NotExistException("Event", "id");
         }
-        if (Objects.equals(event.get().getAuthor().getUsername(), user)) {
-            modifyEventRequest.modifyEvent(event.get());
-            eventRepository.save(event.get());
+        Event event = eventOpt.get();
+        if (Objects.equals(event.getAuthor().getUsername(), user)) {
+            if (modifyEventRequest.getEndDate() != null){
+                if (modifyEventRequest.getEndDate() <= modifyEventRequest.getStartDate()){
+                    throw new RuntimeException("endDate should be later than startDate");
+                }
+            }
+            modifyEventRequest.modifyEvent(event);
+            eventRepository.save(event);
         } else {
             throw new UnauthorizedException();
         }

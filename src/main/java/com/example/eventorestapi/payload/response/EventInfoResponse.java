@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class EventInfoResponse {
 
-    Long id;
+    private Long id;
     private String name;
     private String author;
     private String category;
@@ -16,7 +16,7 @@ public class EventInfoResponse {
     private Long startDate;
     private Long endDate;
     private double[] marker;
-    private Long participantsNumber;
+    private int participantsNumber;
     private Long maxParticipantsNumber;
     private String description;
     private List<String> invitedBy;
@@ -102,11 +102,11 @@ public class EventInfoResponse {
         this.marker = marker;
     }
 
-    public Long getParticipantsNumber() {
+    public int getParticipantsNumber() {
         return participantsNumber;
     }
 
-    public void setParticipantsNumber(Long participantsNumber) {
+    public void setParticipantsNumber(int participantsNumber) {
         this.participantsNumber = participantsNumber;
     }
 

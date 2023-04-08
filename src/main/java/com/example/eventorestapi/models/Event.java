@@ -30,7 +30,6 @@ public class Event {
 
     private Long endDate;
     private double[] marker;
-    private Long participantsNumber;
     private Long maxParticipantsNumber;
 
     @Column(nullable = false)
@@ -56,7 +55,13 @@ public class Event {
     }
 
     public void setAuthor(MyUser author) {
+        author.getAuthoredEvents().add(this);
         this.author = author;
+    }
+
+    public void removeAuthor() {
+        this.author.getAuthoredEvents().remove(this);
+        this.author = null;
     }
 
     public String getCategory() {
@@ -99,12 +104,8 @@ public class Event {
         this.marker = marker;
     }
 
-    public Long getParticipantsNumber() {
-        return participantsNumber;
-    }
-
-    public void setParticipantsNumber(Long participantsNumber) {
-        this.participantsNumber = participantsNumber;
+    public int getParticipantsNumber() {
+        return participants.size();
     }
 
     public Long getMaxParticipantsNumber() {
@@ -130,13 +131,11 @@ public class Event {
     public void addParticipant(MyUser user) {
         participants.add(user);
         user.getEvents().add(this);
-        participantsNumber += 1;
     }
 
     public void deleteParticipant(MyUser user) {
         participants.remove(user);
         user.getEvents().remove(this);
-        participantsNumber -= 1;
     }
 
     public void deleteAllParticipant() {
@@ -144,7 +143,6 @@ public class Event {
             user.getEvents().remove(this);
         }
         participants.clear();
-        participantsNumber = 0L;
     }
 
 }
