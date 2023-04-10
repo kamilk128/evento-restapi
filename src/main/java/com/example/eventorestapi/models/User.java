@@ -2,13 +2,12 @@ package com.example.eventorestapi.models;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class MyUser {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -24,6 +23,9 @@ public class MyUser {
     @OneToMany(mappedBy = "author")
     private Set<Event> authoredEvents = new HashSet<>();
 
+    @OneToMany(mappedBy = "author")
+    private Set<Comment> authoredComments = new HashSet<>();
+
     @ManyToMany
     @JoinTable(name = "user_event",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -36,20 +38,19 @@ public class MyUser {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "friend_id"),
             uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "friend_id"}))
-    private Set<MyUser> friends = new HashSet<>();
+    private Set<User> friends = new HashSet<>();
 
     @ManyToMany(mappedBy = "friends")
-    private Set<MyUser> friendOf = new HashSet<>();
+    private Set<User> friendOf = new HashSet<>();
 
-
-    public MyUser(String email, String username, String password, Long dateOfBirth) {
+    public User(String email, String username, String password, Long dateOfBirth) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
     }
 
-    public MyUser() {
+    public User() {
         this.email = "";
         this.username = "";
         this.password = "";
@@ -96,41 +97,50 @@ public class MyUser {
         return events;
     }
 
-    public Set<MyUser> getFriends() { return friends; }
+    public Set<User> getFriends() { return friends; }
 
-    public Set<MyUser> getFriendOf() { return friendOf; }
-
-    public void setEvents(Set<Event> events) {
-        this.events = events;
-    }
-
-    public void setFriends(Set<MyUser> friends) { this.friends = friends; }
-
-    public void setFriendOf(Set<MyUser> friendOf) { this.friendOf = friendOf; }
-
-    public void addFriend(MyUser friend) {
-        friends.add(friend);
-        friend.getFriendOf().add(this);
-    }
-
-    public void removeFriend(MyUser friend) {
-        friends.remove(friend);
-        friend.getFriendOf().remove(this);
-    }
+    public Set<User> getFriendOf() { return friendOf; }
 
     public Set<Event> getAuthoredEvents() {
         return authoredEvents;
     }
 
+    public Set<Comment> getAuthoredComments() {
+        return authoredComments;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
+    }
+
+    public void setFriends(Set<User> friends) { this.friends = friends; }
+
+    public void setFriendOf(Set<User> friendOf) { this.friendOf = friendOf; }
+
     public void setAuthoredEvents(Set<Event> authoredEvents) {
         this.authoredEvents = authoredEvents;
     }
 
-    public boolean invitedFriend(MyUser friend) {
+    public void setAuthoredComments(Set<Comment> authoredComments) {
+        this.authoredComments = authoredComments;
+    }
+
+    public void addFriend(User friend) {
+        friends.add(friend);
+        friend.getFriendOf().add(this);
+    }
+
+    public void removeFriend(User friend) {
+        friends.remove(friend);
+        friend.getFriendOf().remove(this);
+    }
+
+    public boolean invitedFriend(User friend) {
         return friends.contains(friend);
     }
 
     public boolean participatesInEvent(Event event) {
         return events.contains(event);
     }
+
 }

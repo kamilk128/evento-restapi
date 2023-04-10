@@ -1,6 +1,6 @@
 package com.example.eventorestapi.controllers;
 
-import com.example.eventorestapi.models.MyUser;
+import com.example.eventorestapi.models.User;
 import com.example.eventorestapi.payload.request.LoginRequest;
 import com.example.eventorestapi.payload.request.RegisterRequest;
 import com.example.eventorestapi.payload.response.UserInfoResponse;
@@ -42,7 +42,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        MyUser user = registerRequest.toUser();
+        User user = registerRequest.toUser();
         userService.registerUser(user);
 
         Authentication authentication = authenticationManager

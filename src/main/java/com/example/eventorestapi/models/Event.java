@@ -17,7 +17,7 @@ public class Event {
     private String name;
 
     @ManyToOne
-    private MyUser author;
+    private User author;
 
     @Column(nullable = false)
     private String category;
@@ -36,7 +36,10 @@ public class Event {
     private String description;
 
     @ManyToMany(mappedBy = "events")
-    private Set<MyUser> participants = new HashSet<>();
+    private Set<User> participants = new HashSet<>();
+
+    @OneToMany(mappedBy = "event")
+    private Set<Comment> comments = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -50,11 +53,11 @@ public class Event {
         this.name = name;
     }
 
-    public MyUser getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(MyUser author) {
+    public void setAuthor(User author) {
         author.getAuthoredEvents().add(this);
         this.author = author;
     }
@@ -124,22 +127,34 @@ public class Event {
         this.description = description;
     }
 
-    public Set<MyUser> getParticipants() {
+    public Set<User> getParticipants() {
         return participants;
     }
 
-    public void addParticipant(MyUser user) {
+    public void setParticipants(Set<User> participants) {
+        this.participants = participants;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void addParticipant(User user) {
         participants.add(user);
         user.getEvents().add(this);
     }
 
-    public void deleteParticipant(MyUser user) {
+    public void deleteParticipant(User user) {
         participants.remove(user);
         user.getEvents().remove(this);
     }
 
-    public void deleteAllParticipant() {
-        for (MyUser user: getParticipants()){
+    public void deleteAllParticipants() {
+        for (User user : participants) {
             user.getEvents().remove(this);
         }
         participants.clear();

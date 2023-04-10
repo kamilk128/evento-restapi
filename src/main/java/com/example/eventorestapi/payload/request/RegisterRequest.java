@@ -1,9 +1,7 @@
 package com.example.eventorestapi.payload.request;
 
-import com.example.eventorestapi.models.MyUser;
+import com.example.eventorestapi.models.User;
 import jakarta.validation.constraints.*;
-
-import java.util.Date;
 
 public class RegisterRequest {
     @NotBlank(message = "email is required.")
@@ -54,7 +52,7 @@ public class RegisterRequest {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public MyUser toUser() {
-        return new MyUser(email, username, password, dateOfBirth);
+    public User toUser() {
+        return new User(email, username, password, dateOfBirth);
     }
 }

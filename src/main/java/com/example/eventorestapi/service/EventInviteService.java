@@ -3,7 +3,7 @@ package com.example.eventorestapi.service;
 import com.example.eventorestapi.exceptions.NotExistException;
 import com.example.eventorestapi.models.Event;
 import com.example.eventorestapi.models.EventInvite;
-import com.example.eventorestapi.models.MyUser;
+import com.example.eventorestapi.models.User;
 import com.example.eventorestapi.payload.request.EventInviteRequest;
 import com.example.eventorestapi.payload.response.EventInListResponse;
 import com.example.eventorestapi.payload.response.EventPageResponse;
@@ -26,11 +26,11 @@ public class EventInviteService {
     private EventInviteRepository eventInviteRepository;
 
     public void inviteUserToEvent(String myEmail, EventInviteRequest eventInviteRequest) {
-        Optional<MyUser> inviter = userRepository.findByEmail(myEmail);
+        Optional<User> inviter = userRepository.findByEmail(myEmail);
         if (inviter.isEmpty()) {
             throw new NotExistException("Inviter", "email");
         }
-        Optional<MyUser> invitee = userRepository.findByUsername(eventInviteRequest.getUsername());
+        Optional<User> invitee = userRepository.findByUsername(eventInviteRequest.getUsername());
         if (invitee.isEmpty()) {
             throw new NotExistException("Invitee", "username");
         }

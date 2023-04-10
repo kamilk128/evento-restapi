@@ -1,6 +1,6 @@
 package com.example.eventorestapi.security.service;
 
-import com.example.eventorestapi.models.MyUser;
+import com.example.eventorestapi.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +33,7 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(MyUser user) {
+    public static UserDetailsImpl build(User user) {
         List<GrantedAuthority> authorities = Collections.emptyList();
         return new UserDetailsImpl(
                 user.getId(),

@@ -2,7 +2,7 @@ package com.example.eventorestapi.controllers;
 
 import com.example.eventorestapi.exceptions.NotExistException;
 import com.example.eventorestapi.models.Event;
-import com.example.eventorestapi.models.MyUser;
+import com.example.eventorestapi.models.User;
 import com.example.eventorestapi.payload.request.CreateEventRequest;
 import com.example.eventorestapi.payload.request.ModifyEventRequest;
 import com.example.eventorestapi.payload.response.IdResponse;
@@ -17,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin
@@ -35,7 +33,7 @@ public class EventController {
 
     @GetMapping("")
     public ResponseEntity<?> getEvents(@RequestParam(name = "page", required=false, defaultValue = "1") int page, @RequestParam(name = "pageSize", required=false, defaultValue = "10") int pageSize, @RequestParam(name = "sort-by", required=false) String sortBy, @RequestParam(name = "name", required=false) String name, @RequestParam(name = "filter", required=false) String filter) {
-        return ResponseEntity.ok(eventService.getEvents(page, pageSize, sortBy, name,  filter));
+        return ResponseEntity.ok(eventService.getEvents(page, pageSize, sortBy, name, filter));
     }
 
     @GetMapping("/{id}")
@@ -50,11 +48,11 @@ public class EventController {
     @PostMapping("")
     public ResponseEntity<?> addEvent(Authentication authentication, @Valid @RequestBody CreateEventRequest createEventRequest) {
         Event event = createEventRequest.toEvent();
-        Optional<MyUser> authorOpt = userService.getUserByEmail(authentication.getName());
+        Optional<User> authorOpt = userService.getUserByEmail(authentication.getName());
         if (authorOpt.isEmpty()) {
             throw new NotExistException("User", "email");
         }
-        MyUser author = authorOpt.get();
+        User author = authorOpt.get();
 
         Long id = eventService.createEvent(author, event);
         userEventService.addParticipantToEventByEventId(authentication.getName(), id);

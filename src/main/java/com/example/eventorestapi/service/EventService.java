@@ -4,7 +4,7 @@ import com.example.eventorestapi.exceptions.NotExistException;
 import com.example.eventorestapi.exceptions.UnauthorizedException;
 import com.example.eventorestapi.models.Event;
 import com.example.eventorestapi.models.EventInvite;
-import com.example.eventorestapi.models.MyUser;
+import com.example.eventorestapi.models.User;
 import com.example.eventorestapi.payload.request.ModifyEventRequest;
 import com.example.eventorestapi.payload.response.EventInListResponse;
 import com.example.eventorestapi.payload.response.EventInfoResponse;
@@ -30,6 +30,8 @@ public class EventService {
     private EventRepository eventRepository;
     @Autowired
     private EventInviteRepository eventInviteRepository;
+    @Autowired
+    private CommentService commentService;
 
     public EventPageResponse getEvents(int pageNumber, int pageSize, String sortBy, String name, String filter) {
         PageRequest pageRequest = PageRequest.of(pageNumber-1, pageSize);
@@ -98,11 +100,12 @@ public class EventService {
     }
 
     @Transactional
-    public Long createEvent(MyUser author, Event event) {
-        if (event.getEndDate() != null){
-            if (event.getEndDate() <= event.getStartDate()){
-                throw new RuntimeException("endDate should be later than startDate");
-            }
+    public Long createEvent(User author, Event event) {
+        if (event.getEndDate() != null && event.getEndDate() <= event.getStartDate()) {
+            throw new RuntimeException("endDate should be later than startDate");
+        }
+        if (event.getMaxParticipantsNumber() != null && event.getMaxParticipantsNumber() < 1) {
+            throw new RuntimeException("maxParticipantsNumber should be greater than 0");
         }
         event.setAuthor(author);
         Event createdEvent = eventRepository.saveAndFlush(event);
@@ -123,7 +126,8 @@ public class EventService {
     }
     @Transactional
     public void deleteEvent(Event event) {
-        event.deleteAllParticipant();
+        commentService.deleteAllComments(event.getComments());
+        event.deleteAllParticipants();
         event.removeAuthor();
         eventRepository.deleteById(event.getId());
     }

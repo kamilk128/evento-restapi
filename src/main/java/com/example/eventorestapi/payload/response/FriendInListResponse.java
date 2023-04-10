@@ -1,13 +1,13 @@
 package com.example.eventorestapi.payload.response;
 
-import com.example.eventorestapi.models.MyUser;
+import com.example.eventorestapi.models.User;
 
 public class FriendInListResponse {
 
     private String username;
     private Boolean invitationReceived;
     private Boolean invitationSent;
-    public FriendInListResponse(MyUser friend, Boolean invitationReceived, Boolean invitationSent) {
+    public FriendInListResponse(User friend, Boolean invitationReceived, Boolean invitationSent) {
         this.username = friend.getUsername();
         this.invitationReceived = invitationReceived;
         this.invitationSent = invitationSent;

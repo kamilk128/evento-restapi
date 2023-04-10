@@ -2,8 +2,9 @@ package com.example.eventorestapi.service;
 
 import com.example.eventorestapi.exceptions.NotExistException;
 import com.example.eventorestapi.exceptions.UserAlreadyExistsException;
+import com.example.eventorestapi.models.Comment;
 import com.example.eventorestapi.models.Event;
-import com.example.eventorestapi.models.MyUser;
+import com.example.eventorestapi.models.User;
 import com.example.eventorestapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,44 +24,72 @@ public class UserService {
     private EventService eventService;
 
     @Autowired
+    private CommentService commentService;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Transactional
-    public void registerUser(MyUser myUser) throws UserAlreadyExistsException {
+    public void registerUser(User user) throws UserAlreadyExistsException {
 
-        if (userRepository.existsByEmail(myUser.getEmail())) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new UserAlreadyExistsException("Email");
         }
-        if (userRepository.existsByUsername(myUser.getUsername())) {
+        if (userRepository.existsByUsername(user.getUsername())) {
             throw new UserAlreadyExistsException("Username");
         }
-        myUser.setPassword(bCryptPasswordEncoder.encode(myUser.getPassword()));
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
-        userRepository.save(myUser);
+        userRepository.save(user);
     }
 
-    public Optional<MyUser> getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Transactional
     public void removeUserByEmail(String email) {
-        Optional<MyUser> userOpt = userRepository.findByEmail(email);
+        Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isEmpty()) {
             throw new NotExistException("User", "email");
         }
-        MyUser user = userOpt.get();
+        User user = userOpt.get();
         deleteAllEventsOfUser(user);
+        deleteAllCommentsOfUser(user);
+        deleteAllFriendsOfUser(user);
         userRepository.deleteByEmail(email);
     }
+
     @Transactional
-    public void deleteAllEventsOfUser(MyUser user){
-        //Iterator To Avoid ConcurrentModificationException
-        Iterator<Event> authoredEventsIterator = user.getAuthoredEvents().iterator();
-        while (authoredEventsIterator.hasNext()) {
-            Event event = authoredEventsIterator.next();
-            authoredEventsIterator.remove();
+    public void deleteAllCommentsOfUser(User user) {
+        for (Iterator<Comment> it = user.getAuthoredComments().iterator(); it.hasNext(); ) {
+            Comment comment = it.next();
+            it.remove();
+            commentService.deleteComment(comment);
+        }
+    }
+
+    @Transactional
+    public void deleteAllEventsOfUser(User user) {
+        for (Iterator<Event> it = user.getAuthoredEvents().iterator(); it.hasNext(); ) {
+            Event event = it.next();
+            it.remove();
             eventService.deleteEvent(event);
         }
+    }
+
+    @Transactional
+    public void deleteAllFriendsOfUser(User user) {
+        for (Iterator<User> it = user.getFriends().iterator(); it.hasNext(); ) {
+            User friend = it.next();
+            it.remove();
+            user.removeFriend(friend);
+        }
+        for (Iterator<User> it = user.getFriendOf().iterator(); it.hasNext(); ) {
+            User friend = it.next();
+            it.remove();
+            friend.removeFriend(user);
+        }
+        userRepository.save(user);
     }
 
 }

@@ -12,17 +12,17 @@ public class EventInvite {
 
     @ManyToOne
     @JoinColumn(name = "inviter_id", referencedColumnName = "id")
-    private MyUser inviter;
+    private User inviter;
 
     @ManyToOne
     @JoinColumn(name = "invitee_id", referencedColumnName = "id")
-    private MyUser invitee;
+    private User invitee;
 
     @ManyToOne
     @JoinColumn(name = "event_id", referencedColumnName = "id")
     private Event event;
 
-    public EventInvite(MyUser inviter, MyUser invitee, Event event) {
+    public EventInvite(User inviter, User invitee, Event event) {
         this.inviter = inviter;
         this.invitee = invitee;
         this.event = event;
@@ -35,19 +35,19 @@ public class EventInvite {
         return id;
     }
 
-    public MyUser getInviter() {
+    public User getInviter() {
         return inviter;
     }
 
-    public void setInviter(MyUser inviter) {
+    public void setInviter(User inviter) {
         this.inviter = inviter;
     }
 
-    public MyUser getInvitee() {
+    public User getInvitee() {
         return invitee;
     }
 
-    public void setInvitee(MyUser invitee) {
+    public void setInvitee(User invitee) {
         this.invitee = invitee;
     }
 

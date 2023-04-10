@@ -1,8 +1,7 @@
 package com.example.eventorestapi.security.service;
 
-import com.example.eventorestapi.models.MyUser;
+import com.example.eventorestapi.models.User;
 import com.example.eventorestapi.repository.UserRepository;
-import com.example.eventorestapi.security.service.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,11 +20,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final Optional<MyUser> myUser = userRepository.findByEmail(username);
-        if (myUser.isEmpty()) {
+        final Optional<User> user = userRepository.findByEmail(username);
+        if (user.isEmpty()) {
             throw new UsernameNotFoundException(username);
         }
-        return UserDetailsImpl.build(myUser.get());
+        return UserDetailsImpl.build(user.get());
     }
 }
 
