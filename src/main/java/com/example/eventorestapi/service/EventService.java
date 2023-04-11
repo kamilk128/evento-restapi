@@ -31,6 +31,8 @@ public class EventService {
     @Autowired
     private EventInviteRepository eventInviteRepository;
     @Autowired
+    private EventInviteService eventInviteService;
+    @Autowired
     private CommentService commentService;
 
     public EventPageResponse getEvents(int pageNumber, int pageSize, String sortBy, String name, String filter) {
@@ -65,7 +67,7 @@ public class EventService {
         }
 
         Page<Event> eventPage;
-        if (!spec.getFilters().isEmpty()){
+        if (!spec.getFilters().isEmpty()) {
             eventPage = eventRepository.findAll(spec, pageRequest);
         }
         else {
@@ -101,12 +103,7 @@ public class EventService {
 
     @Transactional
     public Long createEvent(User author, Event event) {
-        if (event.getEndDate() != null && event.getEndDate() <= event.getStartDate()) {
-            throw new RuntimeException("endDate should be later than startDate");
-        }
-        if (event.getMaxParticipantsNumber() != null && event.getMaxParticipantsNumber() < 1) {
-            throw new RuntimeException("maxParticipantsNumber should be greater than 0");
-        }
+        validateEvent(event);
         event.setAuthor(author);
         Event createdEvent = eventRepository.saveAndFlush(event);
         return createdEvent.getId();
@@ -126,6 +123,7 @@ public class EventService {
     }
     @Transactional
     public void deleteEvent(Event event) {
+        eventInviteService.deleteInvitationsToEvent(event.getId());
         commentService.deleteAllComments(event.getComments());
         event.deleteAllParticipants();
         event.removeAuthor();
@@ -139,15 +137,20 @@ public class EventService {
         }
         Event event = eventOpt.get();
         if (Objects.equals(event.getAuthor().getUsername(), user)) {
-            if (modifyEventRequest.getEndDate() != null){
-                if (modifyEventRequest.getEndDate() <= modifyEventRequest.getStartDate()){
-                    throw new RuntimeException("endDate should be later than startDate");
-                }
-            }
             modifyEventRequest.modifyEvent(event);
+            validateEvent(event);
             eventRepository.save(event);
         } else {
             throw new UnauthorizedException();
+        }
+    }
+
+    private void validateEvent(Event event) {
+        if (event.getEndDate() != null && event.getEndDate() <= event.getStartDate()) {
+            throw new RuntimeException("endDate should be later than startDate");
+        }
+        if (event.getMaxParticipantsNumber() != null && event.getMaxParticipantsNumber() < 1) {
+            throw new RuntimeException("maxParticipantsNumber should be greater than 0");
         }
     }
 }

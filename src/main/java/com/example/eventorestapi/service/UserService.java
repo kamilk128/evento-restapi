@@ -16,18 +16,17 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private EventService eventService;
-
+    @Autowired
+    private EventInviteService eventInviteService;
     @Autowired
     private CommentService commentService;
-
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Transactional
     public void registerUser(User user) throws UserAlreadyExistsException {
 
@@ -53,6 +52,7 @@ public class UserService {
             throw new NotExistException("User", "email");
         }
         User user = userOpt.get();
+        eventInviteService.deleteInvitationsOfUser(user.getId());
         deleteAllEventsOfUser(user);
         deleteAllCommentsOfUser(user);
         deleteAllFriendsOfUser(user);
@@ -91,6 +91,5 @@ public class UserService {
         }
         userRepository.save(user);
     }
-
 }
 

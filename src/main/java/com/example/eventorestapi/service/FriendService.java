@@ -12,7 +12,6 @@ import java.util.*;
 
 @Service
 public class FriendService {
-
     @Autowired
     private UserRepository userRepository;
     @Autowired

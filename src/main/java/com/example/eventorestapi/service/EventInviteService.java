@@ -12,6 +12,7 @@ import com.example.eventorestapi.repository.EventRepository;
 import com.example.eventorestapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -70,4 +71,13 @@ public class EventInviteService {
         return new EventPageResponse(info, responseList);
     }
 
+    @Transactional
+    public void deleteInvitationsToEvent(Long eventId) {
+        eventInviteRepository.deleteByEventId(eventId);
+    }
+
+    @Transactional
+    public void deleteInvitationsOfUser(Long userId) {
+        eventInviteRepository.deleteByInviteeIdOrInviterId(userId, userId);
+    }
 }
