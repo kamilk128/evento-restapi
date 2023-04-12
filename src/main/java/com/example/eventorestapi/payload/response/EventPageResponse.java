@@ -4,19 +4,19 @@ import java.util.List;
 import java.util.Map;
 
 public class EventPageResponse {
-    private Map<String, Long> info;
+    private EventPageInfoResponse info;
     private List<EventInListResponse> eventsList;
 
-    public EventPageResponse(Map<String, Long> info, List<EventInListResponse> eventsList) {
+    public EventPageResponse(EventPageInfoResponse info, List<EventInListResponse> eventsList) {
         this.info = info;
         this.eventsList = eventsList;
     }
 
-    public Map<String, Long> getInfo() {
+    public EventPageInfoResponse getInfo() {
         return info;
     }
 
-    public void setInfo(Map<String, Long> info) {
+    public void setInfo(EventPageInfoResponse info) {
         this.info = info;
     }
 

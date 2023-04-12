@@ -3,7 +3,6 @@ package com.example.eventorestapi.service;
 import com.example.eventorestapi.exceptions.NotExistException;
 import com.example.eventorestapi.models.User;
 import com.example.eventorestapi.payload.response.FriendInListResponse;
-import com.example.eventorestapi.repository.EventRepository;
 import com.example.eventorestapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +13,6 @@ import java.util.*;
 public class FriendService {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private EventRepository eventRepository;
 
     public void addFriend(String myEmail, String friendUsername) {
         Optional<User> user = userRepository.findByEmail(myEmail);

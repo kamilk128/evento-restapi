@@ -4,6 +4,7 @@ import com.example.eventorestapi.exceptions.NotExistException;
 import com.example.eventorestapi.models.Event;
 import com.example.eventorestapi.models.User;
 import com.example.eventorestapi.payload.response.EventInListResponse;
+import com.example.eventorestapi.payload.response.EventPageInfoResponse;
 import com.example.eventorestapi.payload.response.EventPageResponse;
 import com.example.eventorestapi.repository.EventInviteRepository;
 import com.example.eventorestapi.repository.EventRepository;
@@ -77,8 +78,7 @@ public class UserEventService {
             responseList = responseList.stream().filter(event -> event.getName().equals(name)).collect(Collectors.toList());
         }
 
-        Map<String, Long> info = new HashMap<>();
-        info.put("results", (long) responseList.size());
+        EventPageInfoResponse info = new EventPageInfoResponse((long) responseList.size());
 
         responseList = responseList.stream().skip((pageNumber-1) * pageSize).limit(pageSize).collect(Collectors.toList());
 

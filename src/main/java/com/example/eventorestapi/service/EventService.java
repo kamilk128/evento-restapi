@@ -8,6 +8,7 @@ import com.example.eventorestapi.models.User;
 import com.example.eventorestapi.payload.request.ModifyEventRequest;
 import com.example.eventorestapi.payload.response.EventInListResponse;
 import com.example.eventorestapi.payload.response.EventInfoResponse;
+import com.example.eventorestapi.payload.response.EventPageInfoResponse;
 import com.example.eventorestapi.payload.response.EventPageResponse;
 import com.example.eventorestapi.repository.EventInviteRepository;
 import com.example.eventorestapi.repository.EventRepository;
@@ -60,10 +61,10 @@ public class EventService {
         }
 
         if (filter != null && !filter.isEmpty()) {
-            spec.addFilter(new Filter("category", filter));
+            spec.addFilter(new Filter("category", filter, FilterOperator.LIKE));
         }
         if (name != null && !name.isEmpty()) {
-            spec.addFilter(new Filter("name", name));
+            spec.addFilter(new Filter("name", name, FilterOperator.LIKE));
         }
 
         Page<Event> eventPage;
@@ -80,10 +81,11 @@ public class EventService {
             responseList.add(new EventInListResponse(event));
         }
 
-        Map<String, Long> info = new HashMap<>();
-        info.put("results", eventPage.getTotalElements());
-        info.put("pages", (long) eventPage.getTotalPages());
-        info.put("currentPage", (long) eventPage.getNumber()+1);
+        EventPageInfoResponse info = new EventPageInfoResponse(
+                eventPage.getTotalElements(),
+                eventPage.getTotalPages(),
+                eventPage.getNumber()+1
+                );
 
         return new EventPageResponse(info, responseList);
     }

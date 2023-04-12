@@ -16,7 +16,7 @@ public class EventSpecification implements Specification<Event> {
     public void addFilter(Filter filter) {
         filters.add(filter);
     }
-
+    @Override
     public Predicate toPredicate(Root<Event> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         Predicate predicate = null;
         for (Filter filter : filters) {
@@ -25,6 +25,7 @@ public class EventSpecification implements Specification<Event> {
                     case EQUALS -> builder.equal(root.get(filter.getPropertyName()), filter.getValue());
                     case GREATER_THAN -> builder.greaterThan(root.get(filter.getPropertyName()), (Long) filter.getValue());
                     case LESS_THAN -> builder.lessThan(root.get(filter.getPropertyName()), (Long) filter.getValue());
+                    case LIKE -> builder.like(builder.lower(root.get(filter.getPropertyName())), "%" + filter.getValue().toString().toLowerCase() + "%");
                 };
                 if (predicate != null) {
                     predicate = builder.and(predicate, newPredicate);
