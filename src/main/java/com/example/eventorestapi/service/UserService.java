@@ -20,6 +20,9 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private UserEventService userEventService;
     @Autowired
     private EventInviteService eventInviteService;
     @Autowired
@@ -53,6 +56,7 @@ public class UserService {
         }
         User user = userOpt.get();
         eventInviteService.deleteInvitationsOfUser(user.getId());
+        quitAllEventsOfUser(user);
         deleteAllEventsOfUser(user);
         deleteAllCommentsOfUser(user);
         deleteAllFriendsOfUser(user);
@@ -74,6 +78,15 @@ public class UserService {
             Event event = it.next();
             it.remove();
             eventService.deleteEvent(event);
+        }
+    }
+
+    @Transactional
+    public void quitAllEventsOfUser(User user) {
+        for (Iterator<Event> it = user.getEvents().iterator(); it.hasNext(); ) {
+            Event event = it.next();
+            it.remove();
+            userEventService.deleteParticipantFromEventByEventId(user.getEmail(), event.getId());
         }
     }
 
