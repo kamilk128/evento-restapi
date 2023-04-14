@@ -30,6 +30,8 @@ public class Event {
 
     private Long endDate;
     private double[] marker;
+
+    private Long participantsNumber = 0L;
     private Long maxParticipantsNumber;
 
     @Column(nullable = false)
@@ -107,8 +109,12 @@ public class Event {
         this.marker = marker;
     }
 
-    public int getParticipantsNumber() {
-        return participants.size();
+    public Long getParticipantsNumber() {
+        return participantsNumber;
+    }
+
+    public void setParticipantsNumber(Long participantsNumber) {
+        this.participantsNumber = participantsNumber;
     }
 
     public Long getMaxParticipantsNumber() {
@@ -146,11 +152,13 @@ public class Event {
     public void addParticipant(User user) {
         participants.add(user);
         user.getEvents().add(this);
+        participantsNumber = (long) participants.size();
     }
 
     public void deleteParticipant(User user) {
         participants.remove(user);
         user.getEvents().remove(this);
+        participantsNumber = (long) participants.size();
     }
 
     public void deleteAllParticipants() {
@@ -158,6 +166,7 @@ public class Event {
             user.getEvents().remove(this);
         }
         participants.clear();
+        participantsNumber = 0L;
     }
 
 }

@@ -16,7 +16,7 @@ public class EventInfoResponse {
     private Long startDate;
     private Long endDate;
     private double[] marker;
-    private int participantsNumber;
+    private Long participantsNumber;
     private Long maxParticipantsNumber;
     private String description;
     private List<String> invitedBy;
@@ -102,11 +102,11 @@ public class EventInfoResponse {
         this.marker = marker;
     }
 
-    public int getParticipantsNumber() {
+    public Long getParticipantsNumber() {
         return participantsNumber;
     }
 
-    public void setParticipantsNumber(int participantsNumber) {
+    public void setParticipantsNumber(Long participantsNumber) {
         this.participantsNumber = participantsNumber;
     }
 

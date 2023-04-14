@@ -8,7 +8,7 @@ public class EventInListResponse {
     private String name;
     private String author;
     private String imageUrl;
-    private int participantsNumber;
+    private Long participantsNumber;
     public EventInListResponse(Event event) {
         this.id = event.getId();
         this.name = event.getName();
@@ -49,11 +49,11 @@ public class EventInListResponse {
         this.imageUrl = imageUrl;
     }
 
-    public int getParticipantsNumber() {
+    public Long getParticipantsNumber() {
         return participantsNumber;
     }
 
-    public void setParticipantsNumber(int participantsNumber) {
+    public void setParticipantsNumber(Long participantsNumber) {
         this.participantsNumber = participantsNumber;
     }
 }
