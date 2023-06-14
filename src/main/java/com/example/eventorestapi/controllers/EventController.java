@@ -32,8 +32,8 @@ public class EventController {
     private UserEventService userEventService;
 
     @GetMapping("")
-    public ResponseEntity<?> getEvents(@RequestParam(name = "page", required=false, defaultValue = "1") int page, @RequestParam(name = "pageSize", required=false, defaultValue = "20") int pageSize, @RequestParam(name = "sort-by", required=false) String sortBy, @RequestParam(name = "name", required=false) String name, @RequestParam(name = "filter", required=false) String filter) {
-        return ResponseEntity.ok(eventService.getEvents(page, pageSize, sortBy, name, filter));
+    public ResponseEntity<?> getEvents(@RequestParam(name = "page", required=false, defaultValue = "1") int page, @RequestParam(name = "pageSize", required=false, defaultValue = "20") int pageSize, @RequestParam(name = "sort-by", required=false) String sortBy, @RequestParam(name = "name", required=false) String name, @RequestParam(name = "filter", required=false) String filter, @RequestParam(name = "lat", required=false, defaultValue = "0") double latitude, @RequestParam(name="lng", required=false, defaultValue = "0") double longitude) {
+        return ResponseEntity.ok(eventService.getEvents(page, pageSize, sortBy, name, filter, latitude, longitude));
     }
 
     @GetMapping("/{id}")
